@@ -95,7 +95,7 @@
 <meta property="og:site_name" content="Sa&#39;s Timing House">
 <meta property="og:description" content="这个问题第一次遇见是在Kylin v10操作系统上，当时是开发web项目启动了node环境之后，控制台直接输出了下面的信息。一开始我以为是系统的问题导致，后来发现并不是。 1error:System limit for number of file watchers reached">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-04-22T01:55:03.362Z">
+<meta property="og:updated_time" content="2021-05-22T07:50:50.157Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux下遇到System limit for number of file watchers reached问题">
 <meta name="twitter:description" content="这个问题第一次遇见是在Kylin v10操作系统上，当时是开发web项目启动了node环境之后，控制台直接输出了下面的信息。一开始我以为是系统的问题导致，后来发现并不是。 1error:System limit for number of file watchers reached">
@@ -325,7 +325,7 @@
 <h2 id="产生原因"><a href="#产生原因" class="headerlink" title="产生原因:"></a>产生原因:</h2><p>启动如 idea，node 启动 angular 或者 vue 服务的时候，都可能会出现这样的问题。</p>
 <p>如报错的字面描述一样，是因为linux系统下，所监听的变化文件数量到达了上限，这时候需要用户自己重新配置最大监听文件数。</p>
 <h2 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/sysctl.conf</span><br><span class="line"># 在最后面加入</span><br><span class="line">fs.inotify.max_user_watches=524288</span><br><span class="line"># 之后运行命令</span><br><span class="line">sudo sysctl -p</span><br></pre></td></tr></table></figure>
-<p>form <a href="https://code.visualstudio.com/docs/setup/linux#_visual-studio-code-is-unable-to-watch-for-file-changes-in-this-large-workspace-error-enospc" target="_blank" rel="noopener">vscode 介绍</a>:</p>
+<p>from <a href="https://code.visualstudio.com/docs/setup/linux#_visual-studio-code-is-unable-to-watch-for-file-changes-in-this-large-workspace-error-enospc" target="_blank" rel="noopener">vscode 介绍</a>:</p>
 <blockquote>
 <p>While 524,288 is the maximum number of files that can be watched, if you’re in an environment that is particularly memory constrained, you may wish to lower the number. Each file watch takes up 1080 bytes, so assuming that all 524,288 watches are consumed, that results in an upper bound of around 540 MiB.</p>
 </blockquote>
