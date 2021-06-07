@@ -247,6 +247,132 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://sangliang.github.io/Timing-House/Timing-House/2017/04/17/使用Phaser来开发我的炉石传说(三 最终篇)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sa">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/Timing-House/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sa's Timing House">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/Timing-House/2017/04/17/使用Phaser来开发我的炉石传说(三 最终篇)/" itemprop="url">
+                  使用Phaser来开发我的炉石传说(三 最终篇)
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-17T00:00:00+08:00">
+                2017-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="4-战斗逻辑"><a href="#4-战斗逻辑" class="headerlink" title="4.战斗逻辑"></a>4.战斗逻辑</h4><p>战斗逻辑可以说是我们游戏核心中的核心了。实现起来也不是很复杂，这里先交待一下思路。</p>
+<p>战斗，无非就是战场上随从之间和玩家英雄之前的属性数据的一些结算而已。我的鳄鱼攻击你的鱼人宝宝，那么我的鳄鱼生命值就减去你的鱼人宝宝随从的攻击力，如果为负，说明鳄鱼人宝宝的攻击力大于我们的鳄鱼随从的攻击力，那么鳄鱼就会阵亡。鱼人宝宝同样要做相同的结算，如果鱼人宝宝的生命值大于鳄鱼的攻击力，那么承受这次攻击之后，鱼人宝宝并不会阵亡，但要将生命值进行更新，也就是鱼人宝宝的最新生命值应该是之前生命值减去鳄鱼的攻击力才对。如果攻击的目标是英雄，直接用英雄的血量去减去攻击者的攻击力。当英雄的血量降到1点以下时（不包含1点），那么英雄也就阵亡，游戏的胜负也就分出来了。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Timing-House/2017/04/17/使用Phaser来开发我的炉石传说(三 最终篇)/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://sangliang.github.io/Timing-House/Timing-House/2017/04/16/使用Phaser来开发我的炉石传说(二)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2028,135 +2154,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://sangliang.github.io/Timing-House/Timing-House/2016/09/27/Javascript中的单元测试（JEST）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Sa">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/Timing-House/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Sa's Timing House">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/Timing-House/2016/09/27/Javascript中的单元测试（JEST）/" itemprop="url">
-                  Javascript中的单元测试（JEST）
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-27T00:00:00+08:00">
-                2016-09-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>首先看下百度百科中关于单元测试的定义。</p>
-<blockquote>
-<p>单元测试（unit testing），是指对软件中的最小可测试单元进行检查和验证。对于单元测试中单元的含义，一般来说，要根据实际情况去判定其具体含义，如C语言中单元指一个函数，Java里单元指一个类，图形化的软件中可以指一个窗口或一个菜单等。总的来说，单元就是人为规定的最小的被测功能模块。单元测试是在软件开发过程中要进行的最低级别的测试活动，软件的独立单元将在与程序的其他部分相隔离的情况下进行测试。</p>
-</blockquote>
-<p>在很多静态语言开发软件的过程中，单元测试已经成为了其保证程序正确运行密不可分的一部分了。尤其在一些敏捷开发过程中，用测试来驱动开发更是屡见不鲜。但是对前端的javascript程序员来说，似乎单元测试用得并不多。但是，现在node的盛行，es6的普及，以及各种强大框架的慢慢出现，使得前端人员对于js代码的单元测试逐渐更加的需要。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Timing-House/2016/09/27/Javascript中的单元测试（JEST）/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2204,7 +2201,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/Timing-House/archives">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
