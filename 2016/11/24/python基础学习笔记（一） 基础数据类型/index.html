@@ -1,0 +1,750 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Timing-House/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/Timing-House/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/Timing-House/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Python,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Timing-House/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="这里我开始抽时间写一下关于python的基础学习笔记。因为python作为一门个人爱好而学习的语言，没有经历过大项目实战的巩固，很容易一段时间不用就会将一些语法忘记得一干二净，所以在此将一些和之前用得比较多的js的特性做出一些简单的对比或者介绍。方便jser入手python。  说明：因为现在python3的普及还算不错了，所以文中的代码运行环境如无特殊说明，都以python3.x版本为主。">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python基础学习笔记（一） 基础数据类型">
+<meta property="og:url" content="https://sangliang.github.io/Timing-House/2016/11/24/python基础学习笔记（一） 基础数据类型/index.html">
+<meta property="og:site_name" content="Sa&#39;s Timing House">
+<meta property="og:description" content="这里我开始抽时间写一下关于python的基础学习笔记。因为python作为一门个人爱好而学习的语言，没有经历过大项目实战的巩固，很容易一段时间不用就会将一些语法忘记得一干二净，所以在此将一些和之前用得比较多的js的特性做出一些简单的对比或者介绍。方便jser入手python。  说明：因为现在python3的普及还算不错了，所以文中的代码运行环境如无特殊说明，都以python3.x版本为主。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-03-16T03:31:21.952Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python基础学习笔记（一） 基础数据类型">
+<meta name="twitter:description" content="这里我开始抽时间写一下关于python的基础学习笔记。因为python作为一门个人爱好而学习的语言，没有经历过大项目实战的巩固，很容易一段时间不用就会将一些语法忘记得一干二净，所以在此将一些和之前用得比较多的js的特性做出一些简单的对比或者介绍。方便jser入手python。  说明：因为现在python3的普及还算不错了，所以文中的代码运行环境如无特殊说明，都以python3.x版本为主。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Timing-House/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sangliang.github.io/Timing-House/2016/11/24/python基础学习笔记（一） 基础数据类型/">
+
+
+
+
+
+  <title> python基础学习笔记（一） 基础数据类型 | Sa's Timing House </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261741312&web_id=1261741312" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Timing-House/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sa's Timing House</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Sa 的学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Timing-House/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/Timing-House/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://sangliang.github.io/Timing-House/Timing-House/2016/11/24/python基础学习笔记（一） 基础数据类型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sa">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/Timing-House/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sa's Timing House">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                python基础学习笔记（一） 基础数据类型
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-24T00:00:00+08:00">
+                2016-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这里我开始抽时间写一下关于python的基础学习笔记。因为python作为一门个人爱好而学习的语言，没有经历过大项目实战的巩固，很容易一段时间不用就会将一些语法忘记得一干二净，所以在此将一些和之前用得比较多的js的特性做出一些简单的对比或者介绍。方便jser入手python。</p>
+<blockquote>
+<p>说明：因为现在python3的普及还算不错了，所以文中的代码运行环境如无特殊说明，都以python3.x版本为主。</p>
+</blockquote>
+<blockquote>
+<p>这个系列所写的比较适合有相关js经验的同学来看，如果完全是新手，推荐可以学习<a href="http://www.liaoxuefeng.com/" target="_blank" rel="noopener">廖雪峰</a>的python教程</p>
+</blockquote>
+<a id="more"></a>
+<h5 id="以下为python的主要基本数据类型"><a href="#以下为python的主要基本数据类型" class="headerlink" title="以下为python的主要基本数据类型"></a>以下为python的主要基本数据类型</h5><ul>
+<li>空(None)</li>
+<li>字符串(String)</li>
+<li>布尔类型(Bolean)</li>
+<li>数值(Number)</li>
+<li>列表(List)</li>
+<li>元组(Tuples)</li>
+<li>字典(Dictionaries)</li>
+</ul>
+<h5 id="空类型-None"><a href="#空类型-None" class="headerlink" title="空类型(None)"></a>空类型(None)</h5><p>空类型对于我们来说还是不陌生的，只是我们在js常用的是null，在python中我们用None来表示空。它是python中一个特殊的值，None不能理解为0，因为0是有意义的，而None是一个特殊的空值。</p>
+<h5 id="字符串-String"><a href="#字符串-String" class="headerlink" title="字符串(String)"></a>字符串(String)</h5><p>和js里面的字符串类似，也是采用双引号或者单引号来表示。不过在python中还可以使用三引号，既’’’三个单引号来表示一段字符串。python三引号的形式用来输入多行文本，也就是说在三引号之间输入的内容将被原样保留，之中的单号和双引号不用转义，其中的不可见字符比如/n和/t都会被保留，这样的好处是你可以替换一些多行的文本。</p>
+<p>声明方式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">mystring = <span class="string">"Hello World"</span></span><br><span class="line">mystring2 = <span class="string">'Hello World'</span></span><br><span class="line">mystring3 = <span class="string">'''Hello World'''</span></span><br></pre></td></tr></table></figure>
+<p>三者的运行结果都是一样的。如果你在三个Hello World中间的空白处键入空格，最后打印这三个变量会发现，前两个并没有发生格式上的变化，仅仅只有第三个变量mystring3的”World”掉入了下一行。</p>
+<h5 id="布尔类型-Bolean"><a href="#布尔类型-Bolean" class="headerlink" title="布尔类型(Bolean)"></a>布尔类型(Bolean)</h5><p>python中的布尔类型和js中的也是同样的，用True和False两个值来表示真假。同样的，布尔值也可以用作运算。但是要注意的是，这里的True和False的首字母都是大写。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> b == <span class="number">1</span>:</span><br><span class="line">    print(b + b) <span class="comment">#输出的结果为2</span></span><br></pre></td></tr></table></figure>
+<p>在这里我们直接拿b(值为True)和数字1作对比，当b==1时，输出b+b的值。而python中，也是默认将布尔真和数值的1作为等价。而且在运算过程中，也是默认将其作为数值1来运算，布尔假的值则为0。</p>
+<h5 id="数值-Number"><a href="#数值-Number" class="headerlink" title="数值(Number)"></a>数值(Number)</h5><p>Python支持四种不同的数值类型：</p>
+<p>int (有符号整数): 通常被称为只是整数或整数，是正或负整数，不带小数点。</p>
+<p>long (长整数 ): 或长，是无限大的整数，这样写整数，后面跟着一个大写或小写的L。</p>
+<p>float (浮点实数值) : 或浮点数，表示实数，并写入一个小数点分隔的整数部分和小数部分。浮点数也可以是科学记数法，用e或E表示的功率10 (2.5e2 = 2.5 x 102 = 250)。</p>
+<p>complex (复数) : 形式如 a + bJ，其中a和b是浮点和J（或j）表示-1的平方根（这是一个虚数）。 a是数的实部，b是虚部。Python编程不使用复杂的数字。</p>
+<p>而在js中，我们所用的数字都是Number类型，当然，系统会根据我们的输入来做自动的转换，python也是。</p>
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line">b = <span class="number">3</span></span><br><span class="line">print(a/b) <span class="comment">#3.3333333333333335</span></span><br></pre></td></tr></table></figure>
+<p>很明显，a是一个整型的数值，b也是一个整型的数值，但是两者做完运算，得到的结果a/b却很明显的是一个float类型，说明系统在运算时，自动将a，b两个数转换为了float类型。这和js也是很相似的。只是js里面没有复数这个类型。这里稍微注意下就可以了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">var</span> b = <span class="number">3</span>;</span><br><span class="line"><span class="built_in">console</span>.log(a/b); <span class="comment">// 3.3333333333333335</span></span><br></pre></td></tr></table></figure>
+<h5 id="列表-List"><a href="#列表-List" class="headerlink" title="列表(List)"></a>列表(List)</h5><p>我们先来看下python中list的声明：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">list1 = [<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>]</span><br><span class="line"></span><br><span class="line">print(list1) <span class="comment"># ['a', 'b', 'c', 'd']</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(list1)):</span><br><span class="line">    print(list1[i]) <span class="comment">#a  b  c  d  (间隔处换行)</span></span><br></pre></td></tr></table></figure>
+<p>怎么样，看着还是很眼熟吧。不过在下面的遍历中我们使用的forin语句和js中的for in还是有很大的不同的。python的forin要更加的强力一些，后面我们会陆续了解到。而且在python中没有像js或者其他的常用编程语言那样常用的for循环，例如：for( var i = 0; i &lt; list1.length; i++){ pass }，我们会用for i in range() 这样的方法来遍历，当然对一个list取长度也是采用的len()这样的一个方法，区别于js的array.length。</p>
+<p>而且，对于list中的数据结构，python和js一样是很宽松的，你既可以放一个string类型，再放一个int类型，也可以数组里面随意嵌套数组，这个和js的使用是几乎一模一样的。</p>
+<p>作为引用类型，它和js中的表现也是一致的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">list1 = [<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>]</span><br><span class="line">list2 = list1</span><br><span class="line">list2.append(<span class="string">"sa"</span>)</span><br><span class="line"></span><br><span class="line">print(list1) <span class="comment">#['a', 'b', 'c', 'd', 'sa']</span></span><br><span class="line">print(list2) <span class="comment">#['a', 'b', 'c', 'd', 'sa'] 两者都发生了改变</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(list1)):</span><br><span class="line">    print(list1[i])  <span class="comment">#a  b  c  d  sa (间隔处换行)</span></span><br></pre></td></tr></table></figure>
+<h5 id="元组-Tuples"><a href="#元组-Tuples" class="headerlink" title="元组(Tuples)"></a>元组(Tuples)</h5><p>这个数据类型我们在js中没法遇到，因为js对于数组来说就只有一个内置数据类型:Array。</p>
+<p>python中的元组我们可以认为是一种更加安全的数组。因为它里面的内容，一旦确定，是无法更改的。所以说，想list中我们常用的append,insert等改变列表内容的方法，在元组面前都是统统失效的。例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">list1 = (<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>)</span><br><span class="line">list1[<span class="number">0</span>] = <span class="string">"sa"</span> <span class="comment"># 报错</span></span><br><span class="line">list1.append(<span class="string">"sa"</span>) <span class="comment"># 报错</span></span><br><span class="line"></span><br><span class="line">print(list1) <span class="comment"># ('a', 'b', 'c', 'd') 注意是圆括号</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(list1)):</span><br><span class="line">    print(list1[i]) <span class="comment">#a  b  c  d  (间隔处换行)</span></span><br></pre></td></tr></table></figure>
+<p>但是也存在这样的情况：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list1 = (<span class="string">"a"</span>,[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],<span class="string">"c"</span>,<span class="string">"d"</span>)</span><br><span class="line">list1[<span class="number">1</span>].append(<span class="string">"sa"</span>) <span class="comment">#元组list1中的第二个元素为列表，这时是可以改变列表中元素的值的</span></span><br><span class="line">print(list1) <span class="comment">#('a', [1, 2, 3, 4, 'sa'], 'c', 'd')</span></span><br></pre></td></tr></table></figure>
+<p>当元组中只有一个元素时，例如 list = (1) 我们需要在1的后面加上逗号，来让解释器与1数字作区分。写成 list = (1,)，而且系统在输出一个元素的元组时，也会同样采用这样的显示方式。</p>
+<p>元组可以定义一些用户需要保证其安全的数据，这样就不会被其他人轻易修改。</p>
+<h5 id="字典-Dictionaries"><a href="#字典-Dictionaries" class="headerlink" title="字典(Dictionaries)"></a>字典(Dictionaries)</h5><p>终于要说最令人激动的数据结构了，js里面称作对象字面量，在python里面叫作字典。其用法两者也是很相似的。来，看下我们似曾相识的声明：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">"a"</span>:<span class="number">1</span>,<span class="string">"b"</span>:<span class="number">2</span>,<span class="string">"c"</span>:<span class="number">3</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>是不是觉得和js的一模一样。在python字典中，键必须是唯一的，但值则不必。值可以取任何数据类型，但键必须是不可变的，如字符串，数字或元组。</p>
+<p>遍历一个字典，方法一：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">"a"</span>:<span class="number">1</span>,<span class="string">"b"</span>:<span class="number">2</span>,<span class="string">"c"</span>:<span class="number">3</span>,<span class="string">"d"</span>:<span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> key <span class="keyword">in</span> d.keys():</span><br><span class="line">    print(key)</span><br><span class="line">    <span class="keyword">if</span> d[key] == <span class="number">1</span>:</span><br><span class="line">        d[key] = <span class="number">100</span></span><br><span class="line">print(d) <span class="comment"># &#123;'b': 2, 'd': 100, 'a': 100, 'c': 3&#125; 最后将值为1的键重新赋值为100(字典是无序的)</span></span><br></pre></td></tr></table></figure>
+<p>方法二：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">d = &#123;<span class="string">"a"</span>:<span class="number">1</span>,<span class="string">"b"</span>:<span class="number">2</span>,<span class="string">"c"</span>:<span class="number">3</span>,<span class="string">"d"</span>:<span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> d,x <span class="keyword">in</span> d.items():</span><br><span class="line">    <span class="keyword">print</span> (<span class="string">"key:"</span>+d+<span class="string">",value:"</span>+str(x)) <span class="comment">#key:c,value:3 key:b,value:2 key:a,value:1 key:d,value:1</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h5><p>其实除了元组，python中的基本数据结构我们在js都遇见过了，其使用方法也是差不多的，所以两者比较着学，其实应该是很容易上手的。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Timing-House/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Timing-House/2016/11/18/CSS3动画浅谈/" rel="next" title="CSS3动画浅谈">
+                <i class="fa fa-chevron-left"></i> CSS3动画浅谈
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Timing-House/2016/12/10/pc到移动端页面开发之硬着陆/" rel="prev" title="pc到移动端页面开发之硬着陆">
+                pc到移动端页面开发之硬着陆 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/Timing-House/images/avatar.gif" alt="Sa">
+          <p class="site-author-name" itemprop="name">Sa</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/Timing-House/archives">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Sangliang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="378305868@qq.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#以下为python的主要基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">以下为python的主要基本数据类型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#空类型-None"><span class="nav-number">2.</span> <span class="nav-text">空类型(None)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字符串-String"><span class="nav-number">3.</span> <span class="nav-text">字符串(String)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#布尔类型-Bolean"><span class="nav-number">4.</span> <span class="nav-text">布尔类型(Bolean)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数值-Number"><span class="nav-number">5.</span> <span class="nav-text">数值(Number)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#列表-List"><span class="nav-number">6.</span> <span class="nav-text">列表(List)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#元组-Tuples"><span class="nav-number">7.</span> <span class="nav-text">元组(Tuples)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字典-Dictionaries"><span class="nav-number">8.</span> <span class="nav-text">字典(Dictionaries)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#小结"><span class="nav-number">9.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sa</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/Timing-House/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/Timing-House/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/Timing-House/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

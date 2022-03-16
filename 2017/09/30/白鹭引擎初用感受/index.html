@@ -1,0 +1,732 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Timing-House/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/Timing-House/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/Timing-House/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Note,Egret,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Timing-House/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="最近一直在用白鹭引擎写游戏，棋牌类的h5游戏。早在开工之前，公司里面就有同事劝我说，别用这东西，这玩意就是一骗子，坑死人了。但是鉴于目前市面上的h5棋牌案例，可以说十有八九是出自白鹭，而且各种h5游戏招聘中也是总要加上”最好有白鹭开发的经验”这样的句子。所以，不信邪的我，就正面怼一怼这个白鹭，看看到底是好东西还是坑东西。">
+<meta name="keywords" content="Note,Egret">
+<meta property="og:type" content="article">
+<meta property="og:title" content="白鹭引擎初用感受">
+<meta property="og:url" content="https://sangliang.github.io/Timing-House/2017/09/30/白鹭引擎初用感受/index.html">
+<meta property="og:site_name" content="Sa&#39;s Timing House">
+<meta property="og:description" content="最近一直在用白鹭引擎写游戏，棋牌类的h5游戏。早在开工之前，公司里面就有同事劝我说，别用这东西，这玩意就是一骗子，坑死人了。但是鉴于目前市面上的h5棋牌案例，可以说十有八九是出自白鹭，而且各种h5游戏招聘中也是总要加上”最好有白鹭开发的经验”这样的句子。所以，不信邪的我，就正面怼一怼这个白鹭，看看到底是好东西还是坑东西。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/36.png">
+<meta property="og:updated_time" content="2022-03-16T03:31:21.958Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="白鹭引擎初用感受">
+<meta name="twitter:description" content="最近一直在用白鹭引擎写游戏，棋牌类的h5游戏。早在开工之前，公司里面就有同事劝我说，别用这东西，这玩意就是一骗子，坑死人了。但是鉴于目前市面上的h5棋牌案例，可以说十有八九是出自白鹭，而且各种h5游戏招聘中也是总要加上”最好有白鹭开发的经验”这样的句子。所以，不信邪的我，就正面怼一怼这个白鹭，看看到底是好东西还是坑东西。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/36.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Timing-House/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sangliang.github.io/Timing-House/2017/09/30/白鹭引擎初用感受/">
+
+
+
+
+
+  <title> 白鹭引擎初用感受 | Sa's Timing House </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261741312&web_id=1261741312" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Timing-House/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sa's Timing House</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Sa 的学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Timing-House/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/Timing-House/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://sangliang.github.io/Timing-House/Timing-House/2017/09/30/白鹭引擎初用感受/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sa">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/Timing-House/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sa's Timing House">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                白鹭引擎初用感受
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-30T00:00:00+08:00">
+                2017-09-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近一直在用白鹭引擎写游戏，棋牌类的h5游戏。早在开工之前，公司里面就有同事劝我说，别用这东西，这玩意就是一骗子，坑死人了。但是鉴于目前市面上的h5棋牌案例，可以说十有八九是出自白鹭，而且各种h5游戏招聘中也是总要加上”最好有白鹭开发的经验”这样的句子。所以，不信邪的我，就正面怼一怼这个白鹭，看看到底是好东西还是坑东西。</p>
+<a id="more"></a>
+<h4 id="1-从文档入门"><a href="#1-从文档入门" class="headerlink" title="1.从文档入门"></a>1.从文档入门</h4><p>毫无疑问，所有的引擎学习入门，90%都是来自官方的文档与案例（cocos有文档一说？？？），官网上关于白鹭的教程还是挺多的，源码也能拿到，案例也有不少，对初学者而言，入门是很轻松惬意的事情。而且作为主流的开发引擎之一，游戏中用到的基本对象，例如sprite对象，容器，事件，这样的东西都能在白鹭中清晰的找到（但是好像没有cocos和unity中的scene概念，白鹭的整个游戏都是在唯一的场景中进行的，只能通过容器的切换来模拟不同的scene）。</p>
+<p>这里我自己封装了一个<a href="https://github.com/SangLiang/EgretSceneController" target="_blank" rel="noopener">ViewManager</a>组件，用它来管理整个游戏的场景。在进入场景的时候会首先执行onEnter方法，跳出场景的时候会执行onExit方法，也就是模拟了我们熟悉的cocos和unity中的场景生命周期。</p>
+<h4 id="2-工具链"><a href="#2-工具链" class="headerlink" title="2.工具链"></a>2.工具链</h4><p>除去文档的问题，开发者比较关心的就是工具链了。</p>
+<p><img src="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/36.png" alt="image"></p>
+<p>白鹭的工具确实有不少，做游戏需要的基本都包含了，从骨骼动画到粒子编辑器。而且他们还有官方使用的eui，这个对于被各种手调游戏组件位置虐的死去活来的程序员来说是天大的好消息。不过具体的表现我就不说了，相较于与unity或者最近的cocos creater来说，简直不能看。比较贴近的是cocos studio这个玩意（bug很多，很卡，很糟心）。不过有总比没有是好多了，要是像phaser那样，每个组件的摆放全得自己一像素一像素调，那也太恶心了。</p>
+<p>不过有一点还是值得赞扬的。那就是白鹭的开发语言：TypeScript。</p>
+<p>虽然我是坚定的原生js(es5,es6,es7)支持者，绝对站在纯正血统这一边。但是在你用ts写完一个项目之后（尤其是2个人以上协同开发的项目），你只能说一声：真是特么的爽爆了。</p>
+<p>类型检测，面向对象的写法，在完成一些大项目的时候来说简直舒服得不行。在多人协作一个js项目的时候，对于一些类的封装方式，每个人都是有所偏好的，有些人喜欢用例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> Person = &#123;</span><br><span class="line">    name:<span class="literal">null</span>,</span><br><span class="line">    age:<span class="literal">null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name,age</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样是一个类，由于其定义的方式不同（原型或者类式）导致我们的代码风格经常是不忍直视。拿着别人的类，你就得根据他的定义方式来拓展方法，这对于js高手来说没问题，所有的麻烦我都能解决，但是对于js挖坑好手们来说够你喝个几壶了。</p>
+<p>好在es6中新的类定义方式被引入了进来，同样还有模块等一些大型项目需要的特性，不过目前还需要babel等工具来转码。</p>
+<p>ts和es6都是好东西，两者我都不排斥，网上对这两种语言使用的争论似乎还有不少，这里不评价，自己用了才知道。</p>
+<p>抛开语言层面来说。白鹭的其他我们能使用到的主要工具无非就是做动画的龙骨，资源和字体打包的Texture Merger。这两个工具距离目前最流行的spine和texturepacker还是有一段距离的，但是对于h5引擎来说，还是走在了前列。值得大家尝试一下。</p>
+<h4 id="3-设计思想"><a href="#3-设计思想" class="headerlink" title="3.设计思想"></a>3.设计思想</h4><p>对于做过web和游戏的同学来说，应该能感觉到与其说白鹭是游戏引擎，不如说是一个基于canvas的绘图库更加合适一些，如果没有eui这个工具，白鹭对游戏的功能封装还是相较其他引擎是差了不少的。</p>
+<p>游戏开发中用到很基本的button组件，场景组件，元素生命周期，或者一些简单的特效，对于像cocos或者unity来说，都是已经内置在引擎之中了。而我们如果希望能在白鹭中使用这些特性就不得不开始我们的手动封装之旅了。这对初学者来说，简直是灾难（尤其是没有游戏开发经验的同学）。</p>
+<p>白鹭的这种特性也使得其应用场景不止于游戏领域，在很多的h5推广页面或者相关的一些动效页面也能看到其的使用身影，我之前就看到过有用白鹭来专门做推广h5的。这也给了开发者更高的自由度，算是有好有坏。</p>
+<h4 id="4-坑"><a href="#4-坑" class="headerlink" title="4.坑"></a>4.坑</h4><p>白鹭的坑还是有不少的。虽说是h5引擎中比较成熟的一款。首先wings编辑器就bug比较多。白鹭的eui组件加载json经常就因为同步代码等问题导致生成失败，而且用户哪怕修改正确之后，再次编译代码又会生成错误的文件，让人很无奈，解决的办法还是有，重启机器。</p>
+<p>同样的编译问题还会出现在根目录下的index.html文件中，每次你修改完该文件后，wings在编译的时候都会抹掉你的修改纪录，正确的姿势是，你要在修改完根目录下的index.html后，复制里面所有的内容，然后去template/debug/index.html里面去粘贴一次，这样才能保证你的修改生效不被覆盖。</p>
+<p>上面是编辑器的坑。白鹭的wings已经有很长时间都没有更新了（我目前使用的是wings4.0.3＋egret5.0.5），wings里面甚至还带了一堆像微信小程序（根本就没有维护）这样的乱七八糟的功能。说句实话，作为一个游戏引擎的界面和代码编辑器，你只要把你该做的东西做好就是了，搞这么多没用的东西是不会有加分的。</p>
+<p>eui.component的使用也是有一些要注意的。创建一个eui.component会生成两个文件，一个以exml结尾，另一个以ts结尾。exml是我们拖放ui的可视化编辑器，而ts结尾的则是控制exml中ui的脚本文件。但是有一点需要我们知道的是，我们在游戏开发中经常需要去取到某一个场景中的子元素。在eui.component中，构造函数并没有创建我们在exml中所放置好的子元素，需要在这个场景被add到舞台之后，其子元素才会被创建出来，我们也才能用例如getChildByName()这样的方法拿到。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myScene = <span class="keyword">new</span> Scene();</span><br><span class="line">myScene.getChildByName(<span class="string">"myButton"</span>); <span class="comment">//&gt;取不到的。场景没被添加到主舞台，不会创建子元素</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myScene = <span class="keyword">new</span> Scene();</span><br><span class="line">GameTarget.addChild(myScene);</span><br><span class="line">myScene.getChildByName(<span class="string">"myButton"</span>);<span class="comment">// &gt; 可以取到</span></span><br></pre></td></tr></table></figure>
+<p>另外一个让我比较不舒服的地方是白鹭的事件监听机制。如果在addEventListener中的回调函数是一个匿名函数，那么当你remove这个listener的时候十有八九是不会成功的。这里我没有关注他的底层是如何实现的，但是我觉得这个设计让我很难受，我只是要移除他的事件监听而已，这个和回调完全不想干啊。</p>
+<p>所以这里我是统一采用了暴力解决问题的方式。直接找到对象中的$EventDispatcher，在里面便利出我们要移除的事件监听，然后将其delete掉。这样，就无论我们在addEventListener中使用的是什么样的函数，都能成功移除了。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> <span class="keyword">this</span>.$EventDispatcher[<span class="number">1</span>]) &#123;</span><br><span class="line">    <span class="keyword">if</span> (i == eventsName) &#123;</span><br><span class="line">            <span class="keyword">delete</span> <span class="keyword">this</span>.$EventDispatcher[<span class="number">1</span>][eventsName];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，这样的做法不一定是最好最正确的。但是有时候我们却不得不这么做。</p>
+<p>另外就是关于一些基础功能的问题。白鹭中官方取子元素的方式就只有两种，一种是getChildAt(),另一种就是我们上面说的getChildByName()，两者有一个问题，那就是只能取到一个元素，如果我们在一个容器中，有同名的三个元素，是无法全部取出来的。我们得找到容器的$children属性，然后自己去便利输出。</p>
+<p>像这样的基本功能需要自己写的案例还有不少，我就不一一举例了。</p>
+<h4 id="5-结尾"><a href="#5-结尾" class="headerlink" title="5.结尾"></a>5.结尾</h4><p>虽然白鹭在使用的过程中有一些不顺手，反人类的地方，但是其总体表现，在我用过的h5引擎中还是不错的。对各个浏览器的兼容能力也是很棒，值得一用。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Timing-House/tags/Note/" rel="tag"># Note</a>
+          
+            <a href="/Timing-House/tags/Egret/" rel="tag"># Egret</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Timing-House/2017/07/11/使用hash来控制浏览器的前进与后退状态/" rel="next" title="使用hash来控制浏览器的前进与后退状态">
+                <i class="fa fa-chevron-left"></i> 使用hash来控制浏览器的前进与后退状态
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Timing-House/2017/10/31/聊聊JS中的遍历/" rel="prev" title="聊聊JS中的遍历">
+                聊聊JS中的遍历 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/Timing-House/images/avatar.gif" alt="Sa">
+          <p class="site-author-name" itemprop="name">Sa</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/Timing-House/archives">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Sangliang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="378305868@qq.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-从文档入门"><span class="nav-number">1.</span> <span class="nav-text">1.从文档入门</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-工具链"><span class="nav-number">2.</span> <span class="nav-text">2.工具链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-设计思想"><span class="nav-number">3.</span> <span class="nav-text">3.设计思想</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-坑"><span class="nav-number">4.</span> <span class="nav-text">4.坑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-结尾"><span class="nav-number">5.</span> <span class="nav-text">5.结尾</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sa</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/Timing-House/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/Timing-House/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/Timing-House/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

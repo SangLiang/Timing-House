@@ -1,0 +1,761 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Timing-House/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/Timing-House/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/Timing-House/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Javascript,React,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Timing-House/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="React火了这么久了，但是因为其门槛，很多希望了解它的前端后端都因为其繁杂的配置，或者学习成本望而却步，这里我就简单的总结下，怎么样入门这一高大上的技术栈。就算工作中不使用，了解其运行原理也是很好的。">
+<meta name="keywords" content="Javascript,React">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redux第一课">
+<meta property="og:url" content="https://sangliang.github.io/Timing-House/2017/02/15/Redux第一课/index.html">
+<meta property="og:site_name" content="Sa&#39;s Timing House">
+<meta property="og:description" content="React火了这么久了，但是因为其门槛，很多希望了解它的前端后端都因为其繁杂的配置，或者学习成本望而却步，这里我就简单的总结下，怎么样入门这一高大上的技术栈。就算工作中不使用，了解其运行原理也是很好的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/20.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/21.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/22.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/23.png">
+<meta property="og:updated_time" content="2022-03-16T03:31:21.951Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redux第一课">
+<meta name="twitter:description" content="React火了这么久了，但是因为其门槛，很多希望了解它的前端后端都因为其繁杂的配置，或者学习成本望而却步，这里我就简单的总结下，怎么样入门这一高大上的技术栈。就算工作中不使用，了解其运行原理也是很好的。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/20.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Timing-House/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sangliang.github.io/Timing-House/2017/02/15/Redux第一课/">
+
+
+
+
+
+  <title> Redux第一课 | Sa's Timing House </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261741312&web_id=1261741312" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Timing-House/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sa's Timing House</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Sa 的学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Timing-House/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/Timing-House/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://sangliang.github.io/Timing-House/Timing-House/2017/02/15/Redux第一课/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sa">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/Timing-House/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sa's Timing House">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                Redux第一课
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-15T00:00:00+08:00">
+                2017-02-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>React火了这么久了，但是因为其门槛，很多希望了解它的前端后端都因为其繁杂的配置，或者学习成本望而却步，这里我就简单的总结下，怎么样入门这一高大上的技术栈。就算工作中不使用，了解其运行原理也是很好的。</p>
+<a id="more"></a>
+<h4 id="推荐学习的网站："><a href="#推荐学习的网站：" class="headerlink" title="推荐学习的网站："></a>推荐学习的网站：</h4><p><a href="http://cn.redux.js.org/index.html" target="_blank" rel="noopener">Redux中文官方示例</a></p>
+<p><a href="https://github.com/react-guide/redux-tutorial-cn" target="_blank" rel="noopener">redux-tutorial-cn</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_one_basic_usages.html" target="_blank" rel="noopener">阮一峰的博客</a></p>
+<h3 id="React"><a href="#React" class="headerlink" title="React"></a>React</h3><p>这里我不会从入门开始讲解react的组件和其语法。所以基本的react知识大家还是要具备。react作为mv*中的view层，学习起来还说不难的，可以参看官方文档。</p>
+<h3 id="Redux"><a href="#Redux" class="headerlink" title="Redux"></a>Redux</h3><p>初接触redux的同学可能真的对他真是一头雾水，不知所云。阮一峰文章中的一句话把redux的核心说的非常透彻。</p>
+<blockquote>
+<p>（1）Web 应用是一个状态机，视图与状态是一一对应的。<br> （2）所有的状态，保存在一个对象里面。</p>
+</blockquote>
+<p> 做过游戏开发的同学对状态机这种概念肯定不会陌生。在游戏实现功能的过程中，可能存在大量的事件触发机制，我们用状态机来管理这种事件机制，这样只需判断状态的变化从执行相应的事件而不用去管理触发机制的对象本身。这是用来简化事件逻辑的一种方法。</p>
+<p> 如今redux也采用了这样一种思想。就是在整个webapp设置一个状态机。redux通过不同的store来存储其中的所有状态。用action来作为一种消息方式，来触发各种不同的状态。而状态的最终处理则是在redux函数之中，他会返回处理之后新的状态，再根据这种新的状态数据来渲染整个页面。</p>
+<p> 我这里盗来峰哥的流程图：</p>
+<p> <img src="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/20.jpg" alt="image"></p>
+<p> 其中的dispatch就像事件的分发一样，用户的action通过这中方式到达reducer中进行处理，从而返回新的state更新react dom。</p>
+<p> 要注意的是，redux并不只是适用于react之中，他作为一个完整的状态机解决方案，可以嵌入各种框架甚至原声js的web中。这点还是很不错的。</p>
+<h3 id="环境的搭建"><a href="#环境的搭建" class="headerlink" title="环境的搭建"></a>环境的搭建</h3><p> 这里我没有自己配置webpack或者gulp这些东西。本来大家对redux就不熟悉，还搞这么多自动化工具，配置起来太痛苦了。我们用他们官方案例中所使用的react-scripts这个环境（其实也是内置webpack）来做为我们的最初学习环境。</p>
+<p> <a href="https://github.com/reactjs/redux" target="_blank" rel="noopener">redux github官方地址</a></p>
+<p> 找到counter这个example，把他的package.json弄下来。我们就用这个来搭建环境。</p>
+<h3 id="写一个Counter计数器"><a href="#写一个Counter计数器" class="headerlink" title="写一个Counter计数器"></a>写一个Counter计数器</h3><p> 计数器实例在example中是自带的demo，但刚刚接触redux的初学者可能难以看懂，这里我就再重写一次，并附上注释</p>
+<p> 我们首先创建一个项目，然后建立如下目录：</p>
+<p> <img src="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/21.png" alt="image"></p>
+<p> 在’public/index.html’中添加代码：</p>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>redux第一课<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"root"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p> 这里的html只是一个模版，我们要用react的组件来渲染他。</p>
+<p> 接下来打开’src/index.js’，这个是我们的程序入口，添加代码：</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> rootEl = <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> HelloWorld = React.createClass(&#123;</span><br><span class="line">    render: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Redux第一课!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> render = <span class="function"><span class="params">()</span> =&gt;</span> ReactDOM.render(</span><br><span class="line">    &lt;HelloWorld /&gt;, rootEl</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">render();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>react全面拥抱es6，看不懂es6语法的同学赶紧去补课。</p>
+</blockquote>
+<p>我们在命令行环境中只要输入’npm start’，整个项目便跑起来了。打开页面如下：</p>
+<p><img src="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/22.png" alt="image"></p>
+<p>我们只是简单的定义了HelloWorld这个组件，然后通过render函数来在调用这个组件，最后渲染到页面上。</p>
+<p>ok,现在我们并没有使用到redux，而仅仅只使用了react的基本渲染。不用着急，我们开始下一步。</p>
+<p>我们需要把组件部分移到’src/components’下面来统一管理，我们新建一个Counter.js,添加代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> React, &#123; Component, PropTypes &#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Counter组件</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 属性</span></span><br><span class="line">    <span class="keyword">static</span> propTypes = &#123;</span><br><span class="line">        value: PropTypes.number.isRequired,</span><br><span class="line">        onIncrement: PropTypes.func.isRequired,</span><br><span class="line">        onDecrement: PropTypes.func.isRequired</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 条件增加</span></span><br><span class="line">    incrementIfOdd = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.props.value % <span class="number">2</span> !== <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.props.onIncrement()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 异步增加</span></span><br><span class="line">    incrementAsync = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        setTimeout(<span class="keyword">this</span>.props.onIncrement, <span class="number">1000</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; value, onIncrement, onDecrement &#125; = <span class="keyword">this</span>.props</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;p&gt;</span><br><span class="line">                Clicked: &#123;value&#125; times</span><br><span class="line">        &#123;<span class="string">' '</span>&#125;</span><br><span class="line">                &lt;button onClick=&#123;onIncrement&#125;&gt;</span><br><span class="line">                    +</span><br><span class="line">        &lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">                &#123;' '&#125;</span></span><br><span class="line"><span class="regexp">                &lt;button onClick=&#123;onDecrement&#125;&gt;</span></span><br><span class="line"><span class="regexp">                    -</span></span><br><span class="line"><span class="regexp">        &lt;/</span>button&gt;</span><br><span class="line">                &#123;<span class="string">' '</span>&#125;</span><br><span class="line">                &lt;button onClick=&#123;<span class="keyword">this</span>.incrementIfOdd&#125;&gt;</span><br><span class="line">                    Increment <span class="keyword">if</span> odd</span><br><span class="line">        &lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">                &#123;' '&#125;</span></span><br><span class="line"><span class="regexp">                &lt;button onClick=&#123;this.incrementAsync&#125;&gt;</span></span><br><span class="line"><span class="regexp">                    Increment async</span></span><br><span class="line"><span class="regexp">        &lt;/</span>button&gt;</span><br><span class="line">            &lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default Counter</span></span><br></pre></td></tr></table></figure>
+<p>这里我们定义了一个Counter组件类，并在组件中定义了他的属性和方法。最后通过export方法导出。</p>
+<p>ok,我们回到程序入口的’src/index.js’，修改代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span></span><br><span class="line"><span class="keyword">import</span> Counter <span class="keyword">from</span> <span class="string">'./components/Counter'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> rootEl = <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> render = <span class="function"><span class="params">()</span> =&gt;</span> ReactDOM.render(</span><br><span class="line">    &lt;Counter /&gt;, rootEl</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">render();</span><br></pre></td></tr></table></figure>
+<p>我们引入了Counter来替代我们之前所渲染的HelloWorld组件。细心的同学可能会注意到，虽然组件成功的渲染了出来，但是由于其方法参数我们还没有传进去，所以控制台会报出相应的错误，这里我们可以暂时不理会，如果有强迫症，先用空函数代替也可以。</p>
+<p>ok，接下来就要开始引入和redux相关的代码了。</p>
+<p>还记得我们之前所说的。redux是一个状态机。所有的状态都保存在一个Store中。所以，整个webapp中，Store只能有一个。</p>
+<p>我们在’src/index.js’中引入createStore函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br></pre></td></tr></table></figure>
+<p>这个函数的作用就是创建一个新的Store。Store是整个webapp的状态容器，我们无法直接去修改Store,必须通过reducer这个函数来对Store进行改变，也就是说reducer是处理状态并返回新状态的一个函数。</p>
+<p>这里我们再写一个reducer，reducer是根据通过响应action来作出状态的改变的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">let</span> reducer = <span class="function">(<span class="params">state = &#123;&#125;,action</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">switch</span>(action.type)&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'SAY'</span>:</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"After dispatch"</span>);</span><br><span class="line">            <span class="keyword">return</span> &#123;</span><br><span class="line">                ...state,</span><br><span class="line">                say:<span class="string">"hello world"</span></span><br><span class="line">            &#125; </span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> state       </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个根据传进来的action来处理状态，最后返回一个新的状态。代码还是比较好理解的。这里需要注意下，action对象下的type属性是必须的，不能随意替换更改。</p>
+<p>我们再更新下’src/index.js’：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span></span><br><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"><span class="keyword">import</span> Counter <span class="keyword">from</span> <span class="string">'./components/Counter'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> rootEl = <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> reducer = <span class="function">(<span class="params">state = &#123;&#125;,action</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">switch</span>(action.type)&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'SAY'</span>:</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"After dispatch"</span>);</span><br><span class="line">            <span class="keyword">return</span> &#123;</span><br><span class="line">                ...state,</span><br><span class="line">                say:<span class="string">"hello world"</span></span><br><span class="line">            &#125; </span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> state       </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建状态容器，redecuer为参数</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取应用当前状态</span></span><br><span class="line"><span class="built_in">console</span>.log(store.getState());</span><br><span class="line"></span><br><span class="line"><span class="comment">// action的分发</span></span><br><span class="line"><span class="keyword">let</span> action = &#123;</span><br><span class="line">    <span class="string">"type"</span>:<span class="string">"SAY"</span></span><br><span class="line">&#125;</span><br><span class="line">store.dispatch(action);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(store.getState());</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> render = <span class="function"><span class="params">()</span> =&gt;</span> ReactDOM.render(</span><br><span class="line">    &lt;Counter /&gt;, rootEl</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">render();</span><br></pre></td></tr></table></figure>
+<p>最后输出的结果如图：</p>
+<p><img src="https://raw.githubusercontent.com/SangLiang/Blog/gh-pages/pics/201609/23.png" alt="image"></p>
+<p>这里我们实现了一个简单的reducer，他能接受type为’SAY’的消息，并对store的state作出修改反馈。还记得我们现在要实现的是一个简单计数器，那么我们继续往下，我们在’src/reducer’中创建一个index.js：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// state增减逻辑</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> (state = <span class="number">0</span>, action) =&gt; &#123;</span><br><span class="line">    <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'INCREMENT'</span>:</span><br><span class="line">            <span class="keyword">return</span> state + <span class="number">1</span></span><br><span class="line">        <span class="keyword">case</span> <span class="string">'DECREMENT'</span>:</span><br><span class="line">            <span class="keyword">return</span> state - <span class="number">1</span></span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> state</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个和我们之前写的reducer是不是很相似，只是对state的操作不同而已。</p>
+<p>我们修改’src/index.js’将这个新的reducer引入，并且在Couter组件中设置好各个函数参数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span></span><br><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"><span class="keyword">import</span> Counter <span class="keyword">from</span> <span class="string">'./components/Counter'</span></span><br><span class="line"><span class="keyword">import</span> reducer <span class="keyword">from</span> <span class="string">'./reducers'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> rootEl = <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建状态容器，redecuer为参数</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> render = <span class="function"><span class="params">()</span> =&gt;</span> ReactDOM.render(</span><br><span class="line">    &lt;Counter</span><br><span class="line">        value=&#123;store.getState()&#125;</span><br><span class="line">        onIncrement=&#123;() =&gt; store.dispatch(&#123; <span class="attr">type</span>: <span class="string">'INCREMENT'</span> &#125;)&#125; <span class="comment">// action在这里传入</span></span><br><span class="line">        onDecrement=&#123;() =&gt; store.dispatch(&#123; <span class="attr">type</span>: <span class="string">'DECREMENT'</span> &#125;)&#125;</span><br><span class="line">        /&gt;,</span><br><span class="line">    rootEl</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">render();</span><br><span class="line"><span class="comment">// 最后是一个订阅函数，用来接受store的变化之后的回调，我们这里是重新渲染页面</span></span><br><span class="line">store.subscribe(render)</span><br></pre></td></tr></table></figure>
+<p>至此，所有关于Counter计数器的讲解就结束了。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>react+redux的整个开发思维还是很有意思的，将游戏开发中的常用套路运用到了web开发之中。不过只要我们认清了其本质，学习起来还说不难的。看到这里，稍微理清了 store action reducer 这三者之间的关系之后，我们再看阮一峰和官方的案例应该会觉得清晰一些。</p>
+<p>最后放一个demo地址，如果你懒得从react的官方去下载，直接看看<a href="https://github.com/SangLiang/ReduxDemo" target="_blank" rel="noopener">这个</a>也是一样的。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Timing-House/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/Timing-House/tags/React/" rel="tag"># React</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Timing-House/2017/02/10/反沉迷，我亲爱的轮子/" rel="next" title="反沉迷，我亲爱的轮子">
+                <i class="fa fa-chevron-left"></i> 反沉迷，我亲爱的轮子
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Timing-House/2017/03/17/聊聊微信小程序/" rel="prev" title="聊聊微信小程序">
+                聊聊微信小程序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/Timing-House/images/avatar.gif" alt="Sa">
+          <p class="site-author-name" itemprop="name">Sa</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/Timing-House/archives">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Sangliang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="378305868@qq.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#推荐学习的网站："><span class="nav-number">1.</span> <span class="nav-text">推荐学习的网站：</span></a></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#React"><span class="nav-number"></span> <span class="nav-text">React</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redux"><span class="nav-number"></span> <span class="nav-text">Redux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环境的搭建"><span class="nav-number"></span> <span class="nav-text">环境的搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写一个Counter计数器"><span class="nav-number"></span> <span class="nav-text">写一个Counter计数器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number"></span> <span class="nav-text">小结</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sa</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/Timing-House/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/Timing-House/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/Timing-House/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
