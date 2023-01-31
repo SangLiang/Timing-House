@@ -1,0 +1,723 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Timing-House/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/Timing-House/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/Timing-House/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Linux,K8s,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Timing-House/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="1.环境准备1234567891011121314151617181920212223242526272829303132333435363738394041# 统一hostscat /etc/hosts10.0.0.10  k8s-master10.0.0.20  k8s-node110.0.0.30  k8s-node2# 如果只装master节点就只用本机地址就可了192.168.137.3">
+<meta name="keywords" content="Linux,K8s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安装部署k8s-版本-1.13">
+<meta property="og:url" content="https://sangliang.github.io/Timing-House/2022/03/25/安装部署k8s-版本-1.13/index.html">
+<meta property="og:site_name" content="Sa&#39;s Timing House">
+<meta property="og:description" content="1.环境准备1234567891011121314151617181920212223242526272829303132333435363738394041# 统一hostscat /etc/hosts10.0.0.10  k8s-master10.0.0.20  k8s-node110.0.0.30  k8s-node2# 如果只装master节点就只用本机地址就可了192.168.137.3">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://sangliang.github.io/Timing-House/images/1_2.png">
+<meta property="og:image" content="https://sangliang.github.io/Timing-House/images/1_3.png">
+<meta property="og:updated_time" content="2023-01-31T03:27:46.163Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安装部署k8s-版本-1.13">
+<meta name="twitter:description" content="1.环境准备1234567891011121314151617181920212223242526272829303132333435363738394041# 统一hostscat /etc/hosts10.0.0.10  k8s-master10.0.0.20  k8s-node110.0.0.30  k8s-node2# 如果只装master节点就只用本机地址就可了192.168.137.3">
+<meta name="twitter:image" content="https://sangliang.github.io/Timing-House/images/1_2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Timing-House/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sangliang.github.io/Timing-House/2022/03/25/安装部署k8s-版本-1.13/">
+
+
+
+
+
+  <title> 安装部署k8s-版本-1.13 | Sa's Timing House </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261741312&web_id=1261741312" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Timing-House/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sa's Timing House</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Sa 的学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Timing-House/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/Timing-House/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://sangliang.github.io/Timing-House/Timing-House/2022/03/25/安装部署k8s-版本-1.13/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sa">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/Timing-House/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sa's Timing House">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                安装部署k8s-版本-1.13
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-25T00:00:00+08:00">
+                2022-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1.环境准备"></a>1.环境准备</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 统一hosts</span></span><br><span class="line">cat /etc/hosts</span><br><span class="line">10.0.0.10  k8s-master</span><br><span class="line">10.0.0.20  k8s-node1</span><br><span class="line">10.0.0.30  k8s-node2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果只装master节点就只用本机地址就可了</span></span><br><span class="line">192.168.137.3 node master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 同步时间</span></span><br><span class="line">ntpdate ntp1.aliyun.com</span><br><span class="line"><span class="comment"># 禁用SELINUX,关闭firewalld和iptables.service,k8s会自己设置iptables网络策略</span></span><br><span class="line">systemctl stop iptables.service</span><br><span class="line">systemctl <span class="built_in">disable</span> iptables.service</span><br><span class="line">systemctl stop firewalld.service</span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld.service</span><br><span class="line"><span class="comment"># 关闭swap,修改/etc/fstab文件,注释掉SWAP的自动挂载,使用free -m确认swap已经关闭</span></span><br><span class="line">swapoff -a</span><br><span class="line"><span class="comment"># 调整swappiness参数</span></span><br><span class="line"><span class="comment"># 创建/etc/sysctl.d/k8s.conf文件,添加如下内容</span></span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">net.ipv4.ip_forward = 1</span><br><span class="line">vm.swappiness=0</span><br><span class="line"><span class="comment"># 生效</span></span><br><span class="line">modprobe br_netfilter</span><br><span class="line">sysctl -p /etc/sysctl.d/k8s.conf</span><br><span class="line"><span class="comment"># 开启ipvs</span></span><br><span class="line">yum -y install ipvsadm</span><br><span class="line">vim /etc/sysconfig/modules/ipvs.modules</span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">ipvs_mods_dir=<span class="string">"/usr/lib/modules/<span class="variable">$(uname -r)</span>/kernel/net/netfilter/ipvs"</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> $(ls <span class="variable">$ipvs_mods_dir</span> | grep -o <span class="string">"^[^.]*"</span>);<span class="keyword">do</span></span><br><span class="line">   /sbin/modinfo -F filename <span class="variable">$i</span> &amp;&gt; /dev/null</span><br><span class="line">  <span class="keyword">if</span> [ $? -eq 0 ];<span class="keyword">then</span></span><br><span class="line">    /sbin/modprobe <span class="variable">$i</span></span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line">chmod +x /etc/sysconfig/modules/ipvs.modules</span><br><span class="line">bash /etc/sysconfig/modules/ipvs.modules</span><br><span class="line">lsmod | grep ip_vs</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h4 id="2-安装"><a href="#2-安装" class="headerlink" title="2.安装"></a>2.安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 Docker</span></span><br><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2</span><br><span class="line">curl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">yum install docker-ce-18.06.1.ce-3.el7 -y</span><br><span class="line">vim /usr/lib/systemd/system/docker.service</span><br><span class="line">Environment=<span class="string">"NO_PROXY=127.0.0.1/8,127.0.0.1/16"</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl start docker</span><br><span class="line">systemctl <span class="built_in">enable</span> docker</span><br><span class="line"> </span><br><span class="line">cat /etc/yum.repos.d/kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-aarch64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line"><span class="comment"># 给两个node分发文件</span></span><br><span class="line">ssh-keygen -t dsa</span><br><span class="line">ssh-copy-id -i ~/.ssh/id_dsa.pub 10.0.0.20</span><br><span class="line">ssh-copy-id -i ~/.ssh/id_dsa.pub 10.0.0.30</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> 20 30; <span class="keyword">do</span> scp /etc/yum.repos.d/&#123;docker-ce.repo,kubernetes.repo&#125; 10.0.0.<span class="variable">$i</span>:/etc/yum.repos.d/;<span class="keyword">done</span></span><br><span class="line"><span class="comment"># 如果用下面这条命令,就会下载最新版本,这里我们用1.13</span></span><br><span class="line"><span class="comment"># yum install -y kubelet kubeadm kubectl</span></span><br><span class="line">yum -y install kubelet-1.13.0 kubeadm-1.13.0 kubernetes-cni-0.6.0 kubectl-1.13.0</span><br><span class="line"><span class="comment"># 设置为开机自启,先不要启动该服务.等初始化完成了再启动</span></span><br><span class="line">systemctl <span class="built_in">enable</span> kubelet</span><br><span class="line"><span class="comment"># 将镜像先下载到本地</span></span><br><span class="line">cat pull-images.sh</span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">images=(kube-apiserver:v1.13.0 kube-controller-manager:v1.13.0 kube-scheduler:v1.13.0 kube-proxy:v1.13.0 pause:3.1 etcd:3.2.24 coredns:1.2.6)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> ima <span class="keyword">in</span> <span class="variable">$&#123;images[@]&#125;</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">   docker pull   registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$ima</span></span><br><span class="line">   docker tag    registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$ima</span>   k8s.gcr.io/<span class="variable">$ima</span></span><br><span class="line">   docker rmi  -f  registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$ima</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"> </span><br><span class="line">chmod +x pull-images.sh &amp;&amp; ./pull-images.sh</span><br><span class="line"><span class="comment"># 集群初始化</span></span><br><span class="line">vim /etc/sysconfig/kubelet</span><br><span class="line">KUBELET_EXTRA_ARGS=<span class="string">"--fail-swap-on=false"</span></span><br><span class="line">kubeadm init --kubernetes-version=v1.13.0 --pod-network-cidr=10.244.0.0/16 \</span><br><span class="line">--service-cidr=10.96.0.0/12  --ignore-preflight-errors=Swap</span><br><span class="line">...</span><br><span class="line">  kubeadm join 10.0.0.10:6443 --token 05blrg.37hx6cwa85giuj5c --discovery-token-ca-cert-hash \</span><br><span class="line">sha256:0a1635e9f31e78317524545faa3dd5957665f8b871b168a605ef523dacbea7bb</span><br><span class="line"><span class="comment"># 初始化中输出的kubeadm join 10.0.0.10:6443这句话,保存好,以后要使用这个命令把node加入集群,并且该命令无法复现</span></span><br><span class="line">mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line"></span><br><span class="line"><span class="comment"># pod网络，用于pod之间的通信。</span></span><br><span class="line"><span class="comment"># 安装flannel网络组件(master上执行,注意这里需要外网)</span></span><br><span class="line">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
+<h5 id="简单说明安装的组件："><a href="#简单说明安装的组件：" class="headerlink" title="简单说明安装的组件："></a>简单说明安装的组件：</h5><ul>
+<li><p>kubelet 运行在Cluster所有节点上，负责启动Pod和容器.</p>
+</li>
+<li><p>kubeadm 用于初始化Cluster。</p>
+</li>
+<li><p>kubectl 是Kubernetes命令行工具。通过kubectl可以部署和管理应用，查看各种资源，创建，删除和更新各种组件。</p>
+</li>
+</ul>
+<h4 id="3-查看信息"><a href="#3-查看信息" class="headerlink" title="3.查看信息"></a>3.查看信息</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看状态信息</span></span><br><span class="line">kubectl get cs</span><br><span class="line"><span class="comment"># 查看节点信息,状态为NotReady,是因为还缺flannel组件,没有这个组件无法设置网络</span></span><br><span class="line">kubectl get nodes</span><br><span class="line"><span class="comment"># 查看当前master节点上kube-system名称空间里运行的所有pod状态</span></span><br><span class="line">kubectl get pods -n kube-system</span><br><span class="line"><span class="comment"># 所有pod必须保证都是running状态的,如果哪个不是,可以通过类似如下命令查看原因</span></span><br><span class="line">kubectl dscrible pods coredns-86c58d9df4-qz9xc -n kube-system</span><br><span class="line"><span class="comment"># 查看当前节点名称空间</span></span><br><span class="line">kubectl get ns</span><br><span class="line"><span class="comment"># 查看pod详细状态</span></span><br><span class="line">kubectl get pods -n kube-system -o wide</span><br><span class="line">kubectl get pods --all-namespaces -o wide</span><br></pre></td></tr></table></figure>
+<h4 id="4-node节点"><a href="#4-node节点" class="headerlink" title="4.node节点"></a>4.node节点</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># nodes上可以不安装kubectl</span></span><br><span class="line">yum -y install kubelet-1.13.0 kubeadm-1.13.0 kubernetes-cni-0.6.0</span><br><span class="line">systemctl <span class="built_in">enable</span> kubelet</span><br><span class="line">cat pull-images.sh</span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">images=(pause:3.1 kube-proxy:v1.13.0)</span><br><span class="line"><span class="keyword">for</span> ima <span class="keyword">in</span> <span class="variable">$&#123;images[@]&#125;</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">   docker pull   registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$ima</span></span><br><span class="line">   docker tag    registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$ima</span>   k8s.gcr.io/<span class="variable">$ima</span></span><br><span class="line">   docker rmi  -f  registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$ima</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"> </span><br><span class="line">chmod +x pull-images.sh &amp;&amp; ./pull-images.sh</span><br><span class="line">docker pull quay.io/coreos/flannel:v0.11.0-amd64</span><br><span class="line"><span class="comment"># 执行kubeadm join</span></span><br><span class="line">vim /etc/sysconfig/kubelet</span><br><span class="line">KUBELET_EXTRA_ARGS=<span class="string">"--fail-swap-on=false"</span></span><br><span class="line">kubeadm join 10.0.0.10:6443 --token 05blrg.37hx6cwa85giuj5c --discovery-token-ca-cert-hash \</span><br><span class="line">sha256:0a1635e9f31e78317524545faa3dd5957665f8b871b168a605ef523dacbea7bb \</span><br><span class="line">--ignore-preflight-errors=Swap</span><br></pre></td></tr></table></figure>
+<p>node上需要的三个镜像</p>
+<p><img src="/Timing-House/images/1_2.png" alt="image"></p>
+<p>两个节点加入master</p>
+<p><img src="/Timing-House/images/1_3.png" alt="image"></p>
+<h4 id="5-使用tab补全的配置"><a href="#5-使用tab补全的配置" class="headerlink" title="5.使用tab补全的配置"></a>5.使用tab补全的配置</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install -y bash-completion</span><br><span class="line"><span class="built_in">source</span>  &lt;(kubectl  completion  bash)</span><br></pre></td></tr></table></figure>
+<h5 id="参考文章："><a href="#参考文章：" class="headerlink" title="参考文章："></a>参考文章：</h5><ul>
+<li><a href="https://www.cnblogs.com/fawaikuangtu123/p/11030129.html" target="_blank" rel="noopener">https://www.cnblogs.com/fawaikuangtu123/p/11030129.html</a></li>
+<li><a href="http://blog.itpub.net/28916011/viewspace-2213536/" target="_blank" rel="noopener">http://blog.itpub.net/28916011/viewspace-2213536/</a></li>
+<li><a href="https://www.cnblogs.com/fawaikuangtu123/p/11030129.html" target="_blank" rel="noopener">https://www.cnblogs.com/fawaikuangtu123/p/11030129.html</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Timing-House/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/Timing-House/tags/K8s/" rel="tag"># K8s</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Timing-House/2022/03/16/内网服务器通过另一台上网机来连接外网/" rel="next" title="内网服务器通过另一台上网机来连接外网">
+                <i class="fa fa-chevron-left"></i> 内网服务器通过另一台上网机来连接外网
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Timing-House/2022/05/09/在KylinV10系统中安装node环境/" rel="prev" title="在KylinV10系统中安装node环境">
+                在KylinV10系统中安装node环境 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/Timing-House/images/avatar.gif" alt="Sa">
+          <p class="site-author-name" itemprop="name">Sa</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/Timing-House/archives">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Sangliang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="378305868@qq.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-环境准备"><span class="nav-number">1.</span> <span class="nav-text">1.环境准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-安装"><span class="nav-number">2.</span> <span class="nav-text">2.安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#简单说明安装的组件："><span class="nav-number">2.1.</span> <span class="nav-text">简单说明安装的组件：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-查看信息"><span class="nav-number">3.</span> <span class="nav-text">3.查看信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-node节点"><span class="nav-number">4.</span> <span class="nav-text">4.node节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-使用tab补全的配置"><span class="nav-number">5.</span> <span class="nav-text">5.使用tab补全的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#参考文章："><span class="nav-number">5.1.</span> <span class="nav-text">参考文章：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sa</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/Timing-House/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/Timing-House/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/Timing-House/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

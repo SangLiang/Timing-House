@@ -1,0 +1,792 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Timing-House/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/Timing-House/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/Timing-House/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Javascript,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Timing-House/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="从大学到工作，写了差不多4年的javascript了，经常听到人们谈论起js时，总离不开几个常规吐槽:”写一个类真是太痛苦了，连继承的函数都得自己写”，”我靠，怎么这个地方的this指的不是当前对象啊？？”，”回调写起来简直就是噩梦”。前几个问题要么在新的ES规范中得到了解决，要么是需要自己认真了解js的相关特性，不过最后关于回调的吐槽是每个jser确实难以忍受的噩梦。">
+<meta name="keywords" content="Javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="远离回调地狱，聊聊promise与async">
+<meta property="og:url" content="https://sangliang.github.io/Timing-House/2017/11/16/远离回调地狱，聊聊promise与async/index.html">
+<meta property="og:site_name" content="Sa&#39;s Timing House">
+<meta property="og:description" content="从大学到工作，写了差不多4年的javascript了，经常听到人们谈论起js时，总离不开几个常规吐槽:”写一个类真是太痛苦了，连继承的函数都得自己写”，”我靠，怎么这个地方的this指的不是当前对象啊？？”，”回调写起来简直就是噩梦”。前几个问题要么在新的ES规范中得到了解决，要么是需要自己认真了解js的相关特性，不过最后关于回调的吐槽是每个jser确实难以忍受的噩梦。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-03-16T03:31:21.960Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="远离回调地狱，聊聊promise与async">
+<meta name="twitter:description" content="从大学到工作，写了差不多4年的javascript了，经常听到人们谈论起js时，总离不开几个常规吐槽:”写一个类真是太痛苦了，连继承的函数都得自己写”，”我靠，怎么这个地方的this指的不是当前对象啊？？”，”回调写起来简直就是噩梦”。前几个问题要么在新的ES规范中得到了解决，要么是需要自己认真了解js的相关特性，不过最后关于回调的吐槽是每个jser确实难以忍受的噩梦。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Timing-House/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sangliang.github.io/Timing-House/2017/11/16/远离回调地狱，聊聊promise与async/">
+
+
+
+
+
+  <title> 远离回调地狱，聊聊promise与async | Sa's Timing House </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261741312&web_id=1261741312" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Timing-House/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sa's Timing House</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Sa 的学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Timing-House/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/Timing-House/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://sangliang.github.io/Timing-House/Timing-House/2017/11/16/远离回调地狱，聊聊promise与async/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sa">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/Timing-House/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sa's Timing House">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                远离回调地狱，聊聊promise与async
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-16T00:00:00+08:00">
+                2017-11-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从大学到工作，写了差不多4年的javascript了，经常听到人们谈论起js时，总离不开几个常规吐槽:”写一个类真是太痛苦了，连继承的函数都得自己写”，”我靠，怎么这个地方的this指的不是当前对象啊？？”，”回调写起来简直就是噩梦”。前几个问题要么在新的ES规范中得到了解决，要么是需要自己认真了解js的相关特性，不过最后关于回调的吐槽是每个jser确实难以忍受的噩梦。</p>
+<a id="more"></a>
+<h4 id="回调地狱："><a href="#回调地狱：" class="headerlink" title="回调地狱："></a>回调地狱：</h4><p>什么是回调地狱？这个词可能是js的专属了，我们来看一个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">request1</span>(<span class="params">param, callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//do somthing</span></span><br><span class="line">    <span class="comment">//do callback</span></span><br><span class="line">    callback();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">request2</span>(<span class="params">param, callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//do somthing</span></span><br><span class="line">    <span class="comment">//do callback</span></span><br><span class="line">    callback();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">request3</span>(<span class="params">param, callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//do somthing</span></span><br><span class="line">    <span class="comment">//do callback</span></span><br><span class="line">    callback();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">request4</span>(<span class="params">param, callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//do somthing</span></span><br><span class="line">    <span class="comment">//do callback</span></span><br><span class="line">    callback();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result = request1(param, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    request2(param, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        request3(param, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            request4(param, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="comment">// ... ...</span></span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这样的情况想必大家都是遇到不少了的，回调里面走回调，然后继续回调，如果还遇上一些复杂的判断或者其他的什么运算，能让这个回调过程惨不忍睹，一旦出现错误，或者有新的需求要改代码，由于其耦合度太高，更是要大动刀子。所以，在js中便有了回调地狱这样的说法。</p>
+<p>这里真的要赞扬一下ES6的出现，为js做出了太多给力的改进，很多之前反人类的设计在ES6里面都得到了很棒的修正，这里我们就来看看promise与async函数带来的便捷。</p>
+<h4 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h4><p>先来看看阮一峰的《ECMAScript6入门》中对promise的介绍吧：</p>
+<blockquote>
+<p>Promise 是异步编程的一种解决方案，比传统的解决方案——回调函数和事件——更合理和更强大。它由社区最早提出和实现，ES6 将其写进了语言标准，统一了用法，原生提供了Promise对象。</p>
+</blockquote>
+<blockquote>
+<p>所谓Promise，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。从语法上说，Promise 是一个对象，从它可以获取异步操作的消息。Promise 提供统一的 API，各种异步操作都可以用同样的方法进行处理。</p>
+</blockquote>
+<p>首先，promise是一个对象，他为异步操作提供了一个容器，可以在其中进行相关的异步操作。</p>
+<p>他有三个状态：pending(进行中)，fulfilled(已成功，可以进行下一步操作),rejected(已失败)。通过异步操作的结果来确定最后的状态是什么，并且，一旦状态确定，其他的操作是无法改变其状态的。</p>
+<p>话不多少，先上代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myPromise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"timer run"</span>);</span><br><span class="line">        resolve(<span class="string">"result resolve"</span>);</span><br><span class="line">    &#125;, <span class="number">2000</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">myPromise.then(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>把setTimieout当做一个异步操作，当返回相关结果时，将promise的状态设置为resolve，并将相关结果传入resolve函数。然后触发myPromise的then()方法，最终输出相关的结果。</p>
+<p>这里要注意一点，new Promise()里面的函数是在你声明完成之后立即执行的。</p>
+<p>像下面的:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myPromise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"timer run"</span>);</span><br><span class="line">        resolve(<span class="string">"result resolve"</span>);</span><br><span class="line">    &#125;, <span class="number">2000</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"run immediately"</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>虽然你没有执行myPromise函数，但是控制台还是输出了run immediately字样。</p>
+<p>这里再看看then方法，它有两个参数:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">myPromise.then(<span class="function"><span class="params">resolve</span>=&gt;</span>&#123;&#125;,reject=&gt;&#123;&#125;);</span><br></pre></td></tr></table></figure>
+<p>第一个resolve是函数正确执行时候的返回，第二个reject是回调失败后的返回。就像我们发起一个ajax请求，总有成功和失败的情况一样，以前我们需要自己来定义失败后执行的流程，而promise已经为我们准备好了失败后的方法。then函数里面如果有返回对象，那么这个对象一定是Promise对象。</p>
+<p>看看一个真正的ajax请求吧:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> getAjax = <span class="function"><span class="keyword">function</span> (<span class="params">url</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> result = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.status == <span class="number">200</span>) &#123;</span><br><span class="line">                resolve(<span class="keyword">this</span>.response);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="keyword">this</span>.statusText))</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">        xhr.open(<span class="string">"GET"</span>, url);</span><br><span class="line">        xhr.onreadystatechange = result;</span><br><span class="line">        xhr.responseType = <span class="string">"json"</span>;</span><br><span class="line">        xhr.setRequestHeader(<span class="string">"Accept"</span>, <span class="string">"application/json"</span>);</span><br><span class="line">        xhr.send();</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">getAjax(<span class="string">"/test.json"</span>).then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(result);</span><br><span class="line">&#125;, error =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>客户端发起请求，当响应结果时调用result函数，根据结果将promise的状态设置为resolve或者reject，然后再触发then函数来输出最后的结果。</p>
+<p>so，promise的大致用法就是这样，看着并不是很难。接下来我们要来解决下之前我们遇到的回调地狱问题。首先我们得把之前的request1… … request4用promise的写法来写，就像我们之前的getAjax函数一样:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> request1 = <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(data);</span><br><span class="line">            resolve(data);</span><br><span class="line">        &#125;, <span class="number">200</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> request2 = <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(data);</span><br><span class="line">            resolve(data + <span class="number">1</span>);</span><br><span class="line">        &#125;, <span class="number">200</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> request3 = <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(data);</span><br><span class="line">            resolve(data + <span class="number">1</span>);</span><br><span class="line">        &#125;, <span class="number">200</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> request4 = <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(data);</span><br><span class="line">            resolve(data + <span class="number">1</span>);</span><br><span class="line">        &#125;, <span class="number">200</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">request1(<span class="number">1</span>)</span><br><span class="line">    .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> request2(data);</span><br><span class="line">    &#125;)</span><br><span class="line">    .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> request3(data);</span><br><span class="line">    &#125;)</span><br><span class="line">    .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> request4(data);</span><br><span class="line">    &#125;)</span><br><span class="line">    .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(data);</span><br><span class="line">    &#125;)</span><br><span class="line">    .catch(<span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(error);</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 最后的结果 1 1 2 3 4</span></span><br></pre></td></tr></table></figure>
+<p>这样看起来是不是比之前无限嵌套的回调函数要舒服多了呢。</p>
+<p>这里要注意，如果要形成链式调用，那么return是必不可少的。<strong>他会将返回值作为下一个resolve函数的参数</strong>。</p>
+<p>我们在函数的末尾加了一个catch函数，它能捕捉到之前then中所抛出的错误，包括reject中的错误。值得注意的是，如果抛出了错误，整个then的调用链就会在错误抛出的函数中被终止，不会再接下里执行了，也就是，如果request2中的异步结果被reject，那么后续的request3,request4都不会执行。</p>
+<p>关于promise最后我们再聊一下Promise的静态方法。</p>
+<ol>
+<li>Promise.resolve()</li>
+</ol>
+<p>当需要将现有对象转换为Promise对象时，我们就可以用Promise.resolve这个方法了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> test = <span class="built_in">Promise</span>.resolve(<span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">test.then(<span class="function"><span class="keyword">function</span>(<span class="params">txt</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(txt);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出 hello</span></span><br></pre></td></tr></table></figure>
+<p>这里的Promise.resolve()可以接受一个参数，如果该参数是一个非对象，则返回一个新的Promise对象，状态为resolve。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> testObj = &#123;</span><br><span class="line">    then:<span class="function"><span class="keyword">function</span>(<span class="params">resolve,reject</span>)</span>&#123;</span><br><span class="line">        resolve(<span class="string">"hello Promise"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> test = <span class="built_in">Promise</span>.resolve(testObj);</span><br><span class="line"></span><br><span class="line">test.then(<span class="function"><span class="keyword">function</span>(<span class="params">value</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>如果这个参数是一个包含了then方法的对象，立即执行这个对象的then方法，将其转换为resolve状态。</p>
+<ol start="2">
+<li>Promise.all()</li>
+</ol>
+<p>这个方法是将多个Promise实例包装成为一个新的Promise实例。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> request1 = <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(data);</span><br><span class="line">            resolve(data);</span><br><span class="line">        &#125;, <span class="number">400</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> request2 = <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(data);</span><br><span class="line">            resolve(data + <span class="number">1</span>);</span><br><span class="line">        &#125;, <span class="number">200</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Promise</span>.all([request1(<span class="number">1</span>),request2(<span class="number">2</span>)]).then(<span class="function">(<span class="params">[result1,result2]</span>) =&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(result1,result2);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出结果： 2, 1 , 1 3</span></span><br></pre></td></tr></table></figure>
+<p>只有当所有的Promise都返回resolve的时候，Promise.all才会返回resolve，然后其结果会被返回为一个数组。如果有一个Promise状态是reject，那么Promise.all的状态就会变成reject，最先返回reject的返回值，传递给Promise.all的回调函数。</p>
+<p>promise还有很多不错的特性，我这里推荐大家去看阮一峰的<a href="http://es6.ruanyifeng.com/#docs/promise" target="_blank" rel="noopener">《ECMAScript 6入门》</a>。大神讲的非常详细，我这里只简单说下上手用法。</p>
+<h4 id="async"><a href="#async" class="headerlink" title="async"></a>async</h4><p>说完了promise，我们对ES6中新的回调写法算是有了一个初步了解。接下来我们得继续聊一聊和回调非常相关的，js的另一个特性：异步。</p>
+<p>都知道js是一门单线程的语言，所以当需要处理多任务的时候，就离不开异步这个东西了。试想一下，我们需要操作某个文件，首先执行了打开文件的指令，可能这个文件有点大，需要5秒的时间来打开，那么，如果不做异步处理，用户就得等着5秒过去，才能执行下一步操作，如果下一步操作又需要5秒……由此可见，异步的使用，在js开发中是一个非常重要的技术项。</p>
+<p>那么我们是怎么处理异步任务的呢。</p>
+<p>方法也是简单粗暴：回调</p>
+<p>回到之前的例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// consume a lot of time</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readFile</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// some code</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processFile</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// some code</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile();</span><br><span class="line">processFile();</span><br></pre></td></tr></table></figure>
+<p>这里有两个函数，readFile是一个非常消耗性能的函数，可能需要很久的时间，而processFile函数需要等待readFile所带回的结果才能执行，那么这就非常尴尬了。为什么我们要白白的去浪费时间去等待上一个任务的执行呢？？</p>
+<p>于是，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// consume a lot of time</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readFile</span>(<span class="params">callback</span>)</span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="comment">// some code</span></span><br><span class="line">        callback();</span><br><span class="line">    &#125;,<span class="number">100</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processFile</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// some code</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile(processFile);</span><br></pre></td></tr></table></figure>
+<p>聪明的js开发者想到了用回调的方法，我们用setTimeout来让他在主线程（不是真的线程）执行后开始执行，然后通过回调，来获取耗时操作所返回的结果。</p>
+<p>这样确实可以解决一些问题，但是回调这种搞法稍不注意就会变成上面的地狱模式，虽然有了Promise，一大长条的then函数让人也看着不是很舒服吧。</p>
+<p>ok，于是聪明的js开发者又想到了新的方法，我们可以用发布订阅模式呀。我们在processFile中做好订阅监听，同样是同样利用setTimeout，把最后返回的结果发布出去不就可以了吗？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// consume a lot of time</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readFile</span>(<span class="params">callback</span>)</span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="comment">// some code</span></span><br><span class="line">        dispatchEvent(<span class="string">"MyEvent"</span>,data)</span><br><span class="line">    &#125;,<span class="number">100</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processFile</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    registEvent(<span class="string">"MyEvent"</span>,<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">       <span class="comment">// some code </span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">readFile();</span><br><span class="line">processFile();</span><br></pre></td></tr></table></figure>
+<p>(这里的dispatch和registEvent，需要自己去实现。)</p>
+<p>你说都到了ES6 ES7 ES8的年代了，还没有个稍微能让人看着舒服得异步处理的解决方法吗？</p>
+<p>async与await出现了。</p>
+<p>其实在async之前还有generator这个函数，只是在目前为止，大家都倾向于将async函数作为js异步的最终解决方案。所以这里我就不再展开说generator函数了，<a href="http://es6.ruanyifeng.com/#docs/generator" target="_blank" rel="noopener">这里</a>有详细的关于generator的介绍。</p>
+<p>但是，我们必须知道，async和awiat是以generator为基础封装的，只是为使用generator提供了更便捷的方法，是generator的语法糖，所以，有时间去了解下generator函数也是很有必要的。</p>
+<p>好了话不多少，看看关于async这个家伙该怎么用。</p>
+<p>回到之前的那个读取大文件的例子，如果我们用async来写：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// consume a lot of time</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readFile</span>(<span class="params">filename</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// read file </span></span><br><span class="line">        <span class="keyword">if</span> (<span class="comment">/*success*/</span>) &#123;</span><br><span class="line">            resolve(result);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            reject(result);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processFile</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// some code </span></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">main</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> data = <span class="keyword">await</span> readFile(); <span class="comment">// 直到返回结果才会执行下一步</span></span><br><span class="line">    <span class="keyword">var</span> result = processFile(data);</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">main().then(<span class="function"><span class="params">result</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(result);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这里我们首先将readFile函数改造成一个返回值为Promise的异步函数，然后在之后声明了 async function main。</p>
+<p>function之前加上了async关键字，表明这个函数为一个异步函数，这个是必须的，只有异步函数内部，才能使用await关键字来获取返回值。</p>
+<p>这里main函数在执行的时候，会等待readFile()所带回来的返回值，也就是说，当执行到这里时，程序的执行权交给了readFile方法，当readFile返回结果后，才会进行下一步操作。await就是等待的意思，await后面所跟的函数，是一个Promise对象(如果不是Promise对象，会直接调用Promise.resolve方法转为一个立即执行的Promise)。</p>
+<p>来看看一个可以执行的案例，和上面的结构基本一致，最后会在两秒后输出hello world。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params">value, ms</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>) =&gt;</span> &#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            resolve(value)</span><br><span class="line">        &#125;, ms);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">asyncPrint</span>(<span class="params">value, ms</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = <span class="keyword">await</span> timeout(value, ms);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">asyncPrint(<span class="string">'hello world'</span>, <span class="number">2000</span>).then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(result);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>多个异步函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params">value, ms</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            resolve(value)</span><br><span class="line">        &#125;, ms);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">timeout2</span>(<span class="params">value, ms</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> temp = value + <span class="string">" sangliang"</span>;</span><br><span class="line">            resolve(temp)</span><br><span class="line">        &#125;, ms);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">asyncPrint</span>(<span class="params">value, ms</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = <span class="keyword">await</span> timeout(value, ms);</span><br><span class="line">    <span class="built_in">console</span>.log(result);</span><br><span class="line">    <span class="keyword">var</span> result2 = <span class="keyword">await</span> timeout2(result,ms);</span><br><span class="line">    <span class="keyword">return</span> result2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">asyncPrint(<span class="string">'hello world'</span>, <span class="number">2000</span>).then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(result);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"bye bye world"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出顺序  bye bye world </span></span><br><span class="line"><span class="comment">// hello world</span></span><br><span class="line"><span class="comment">// hello world sangliang</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>进一步说，async函数完全可以看作多个异步操作，包装成的一个 Promise 对象，而await命令就是内部then命令的语法糖。——<a href="http://es6.ruanyifeng.com/#docs/async" target="_blank" rel="noopener">《ECMASCRIPT 6 入门》</a></p>
+</blockquote>
+<p>在这里，了解过generator的同学应该可以看出一些相似点了。</p>
+<p>async就和generator函数中的*相似，而await和yield又是相似的。只是关于gererator的执行需要一个单独的执行函数，这里async方法在此给我们做了精简，使用起来更加方便了一些。</p>
+<p>最后说下async的错误处理，第一种方式，是在执行async函数时，在函数的最后catch错误：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"My error"</span>);</span><br><span class="line">        <span class="comment">// reject("My error")  同样可以被catch到</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test()</span><br><span class="line">    .then(<span class="function"><span class="params">value</span> =&gt;</span> &#123; <span class="built_in">console</span>.log(value) &#125;)</span><br><span class="line">    .catch(<span class="function"><span class="params">error</span> =&gt;</span> &#123; <span class="built_in">console</span>.log(error) &#125;);</span><br></pre></td></tr></table></figure>
+<p>这种方式比较便捷，能处理所有的async函数中，await所抛出的错误，包括promise中的reject状态。但是这样也是有局限性，如果我的async中有多个异步，那么只要有一个异步抛出了错误或者被reject掉，那么整个async中的函数都不能进行了，直接跳到了最后的catch中，而很多时候，我们希望哪怕有两个异步是失败了，但是还是可以继续执行我需要的功能。那么我么可以这么写：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">            reject(<span class="string">"first step Error"</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;<span class="keyword">catch</span>(e)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(e);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        resolve(<span class="string">"second step"</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test()</span><br><span class="line">    .then(<span class="function"><span class="params">value</span> =&gt;</span> &#123; <span class="built_in">console</span>.log(value) &#125;)</span><br><span class="line">    .catch(<span class="function"><span class="params">error</span> =&gt;</span> &#123; <span class="built_in">console</span>.log(error) &#125;)</span><br></pre></td></tr></table></figure>
+<p>我们在await函数之前使用try…catch语句，让错误直接在async中就得到处理，这样，不论前一个await返回什么样的结果，我们最后的await都能得以返回，不会被终止。</p>
+<p>最后，说下关于两个await同时进行的写法。写代码总是有先后顺序的，而await又是对先后顺序非常敏感的（需要等待前一个await执行完），那么，如果我们需要将两个await同时进行该怎么做呢？</p>
+<p>还记得我们之前的Promise.all方法吗，这里同样可以发挥作用:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 写法一</span></span><br><span class="line"><span class="keyword">let</span> [foo, bar] = <span class="keyword">await</span> <span class="built_in">Promise</span>.all([getFoo(), getBar()]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写法二</span></span><br><span class="line"><span class="keyword">let</span> fooPromise = getFoo();</span><br><span class="line"><span class="keyword">let</span> barPromise = getBar();</span><br><span class="line"><span class="keyword">let</span> foo = <span class="keyword">await</span> fooPromise;</span><br><span class="line"><span class="keyword">let</span> bar = <span class="keyword">await</span> barPromise;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ---- 引用自《ECMAScript6 入门》</span></span><br></pre></td></tr></table></figure>
+<h4 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h4><p>关于回调与异步，说到这里也差不多了。文章给出了ES6中promise与async函数的基本使用，如果之前从没使用过，那么现在应该有个基本的概念了。其中还有很多细节的方法与技巧，我这里就不多说了，大家如果有需要，自然会去查找更高阶的教程。</p>
+<ul>
+<li>参考资料：<blockquote>
+<p><a href="http://es6.ruanyifeng.com/" target="_blank" rel="noopener">《ECMASCript 6入门》</a>  – 作者：阮一峰</p>
+</blockquote>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Timing-House/tags/Javascript/" rel="tag"># Javascript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Timing-House/2017/10/31/聊聊JS中的遍历/" rel="next" title="聊聊JS中的遍历">
+                <i class="fa fa-chevron-left"></i> 聊聊JS中的遍历
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Timing-House/2017/12/31/2017年总结/" rel="prev" title="2017年总结">
+                2017年总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/Timing-House/images/avatar.gif" alt="Sa">
+          <p class="site-author-name" itemprop="name">Sa</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/Timing-House/archives">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Sangliang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="378305868@qq.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#回调地狱："><span class="nav-number">1.</span> <span class="nav-text">回调地狱：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Promise"><span class="nav-number">2.</span> <span class="nav-text">Promise</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#async"><span class="nav-number">3.</span> <span class="nav-text">async</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最后"><span class="nav-number">4.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sa</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/Timing-House/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/Timing-House/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/Timing-House/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

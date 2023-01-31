@@ -1,0 +1,698 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Timing-House/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/Timing-House/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/Timing-House/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Javascript,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Timing-House/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="最近在做一款html5的游戏。其中用到了不少的js回调方法，这也是一个很好的契机，帮我把一些不是很理解清晰的概念又梳理了一次。 首先说下我对回调的理解。最简单的无非就是在某个函数执行完了之后，在接着去执行另一个函数。 用过jqeury的都知道，在ajax方法中会有一个success的属性，这个属性的功能就是在异步或者同步过程中拿到了目标数据后要执行的方法。这也是使用回调的重要的场景。我们要确定某一">
+<meta name="keywords" content="Javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于js中的简单回调写法">
+<meta property="og:url" content="https://sangliang.github.io/Timing-House/2016/07/08/关于js中的简单回调写法/index.html">
+<meta property="og:site_name" content="Sa&#39;s Timing House">
+<meta property="og:description" content="最近在做一款html5的游戏。其中用到了不少的js回调方法，这也是一个很好的契机，帮我把一些不是很理解清晰的概念又梳理了一次。 首先说下我对回调的理解。最简单的无非就是在某个函数执行完了之后，在接着去执行另一个函数。 用过jqeury的都知道，在ajax方法中会有一个success的属性，这个属性的功能就是在异步或者同步过程中拿到了目标数据后要执行的方法。这也是使用回调的重要的场景。我们要确定某一">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-03-16T03:31:21.955Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于js中的简单回调写法">
+<meta name="twitter:description" content="最近在做一款html5的游戏。其中用到了不少的js回调方法，这也是一个很好的契机，帮我把一些不是很理解清晰的概念又梳理了一次。 首先说下我对回调的理解。最简单的无非就是在某个函数执行完了之后，在接着去执行另一个函数。 用过jqeury的都知道，在ajax方法中会有一个success的属性，这个属性的功能就是在异步或者同步过程中拿到了目标数据后要执行的方法。这也是使用回调的重要的场景。我们要确定某一">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Timing-House/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sangliang.github.io/Timing-House/2016/07/08/关于js中的简单回调写法/">
+
+
+
+
+
+  <title> 关于js中的简单回调写法 | Sa's Timing House </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261741312&web_id=1261741312" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Timing-House/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sa's Timing House</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Sa 的学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Timing-House/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/Timing-House/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://sangliang.github.io/Timing-House/Timing-House/2016/07/08/关于js中的简单回调写法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sa">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/Timing-House/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sa's Timing House">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于js中的简单回调写法
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-08T00:00:00+08:00">
+                2016-07-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近在做一款html5的游戏。其中用到了不少的js回调方法，这也是一个很好的契机，帮我把一些不是很理解清晰的概念又梳理了一次。</p>
+<p>首先说下我对回调的理解。最简单的无非就是在某个函数执行完了之后，在接着去执行另一个函数。</p>
+<p>用过jqeury的都知道，在ajax方法中会有一个success的属性，这个属性的功能就是在异步或者同步过程中拿到了目标数据后要执行的方法。这也是使用回调的重要的场景。我们要确定某一个动作已经完全的执行到位了，然后再去执行下一个动作。</p>
+<a id="more"></a>
+<p>举个例子吧：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myAlarmClock = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> clock = setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="built_in">console</span>.log(count);</span><br><span class="line">&#125;,<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">myAlarmClock.alarm = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(count==<span class="number">3</span>)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'时间到了！！！'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myAlarmClock.alarm();</span><br></pre></td></tr></table></figure>
+<p>我们用js来写了一个小小的闹钟。我们在myAlarmClock中来设定闹铃的时间，现在我希望在3秒之后闹钟能够提示我。但是很显然，用上面的代码实现的闹钟并没有实现我们理想中的功能。不过大家应该很容易找到其中的错误，myAlarmClock.alarm()方法的位置不正确。因为在alarm函数执行的时候，count的值还是0，所以他不可能会打印出“时间到了”。</p>
+<p>然后我们修改下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myAlarmClock = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> clock = setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="built_in">console</span>.log(count);</span><br><span class="line">    <span class="comment">//在这里面加入了对count的判断</span></span><br><span class="line">    <span class="keyword">if</span>(count==<span class="number">3</span>)&#123;</span><br><span class="line">        myAlarmClock.alarm();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;,<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">myAlarmClock.alarm = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="comment">//去掉了对count的判断</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'时间到了！！！'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么这算不算一个回调呢？</p>
+<p>当然不算。这只是一个普通的函数的调用，还不能构成正真意义上的函数回调。</p>
+<p>那我们接下来继续，来实现一个真正的回调。</p>
+<p>闹钟响了，代表我们有重要的事情要开始做了。这里我们把重要得事情叫作唱歌，我们来写一个唱歌的方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">myAlarmClock.sing = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'我在唱歌！！！'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>方法是写好了，我们接下来要把方法实现加入。比如这样做：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myAlarmClock = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> clock = setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="built_in">console</span>.log(count);</span><br><span class="line">    <span class="keyword">if</span>(count==<span class="number">3</span>)&#123;</span><br><span class="line">        myAlarmClock.alarm();</span><br><span class="line">        myAlarmClock.sing();<span class="comment">//开始唱歌</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;,<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">myAlarmClock.alarm = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'时间到了！！！'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myAlarmClock.sing = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'我在唱歌！！！'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那如果我还有一个跳舞的方法，在闹钟响起之后，我不想唱歌，我要跳舞，又该怎么做呢？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myAlarmClock = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> clock = setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="built_in">console</span>.log(count);</span><br><span class="line">    <span class="keyword">if</span>(count==<span class="number">3</span>)&#123;</span><br><span class="line">        myAlarmClock.alarm();</span><br><span class="line">        myAlarmClock.dancing();<span class="comment">//在这里，我们把唱歌替换成了跳舞</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;,<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">myAlarmClock.alarm = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'时间到了！！！'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myAlarmClock.sing = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'我在唱歌！！！'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myAlarmClock.dancing = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"我在跳舞"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>于是，我们删除了唱歌方法，将其改为了跳舞方法。</p>
+<p>但是这样的直接改代码的方式可能不是我们最习惯的方法，能不能在alarm里给个参数，让闹钟响起之后直接做回调呢？</p>
+<p>当然可以，我们只要改alarm方法就可以了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">myAlarmClock.alarm = <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'时间到了！！！'</span>);</span><br><span class="line">    callback();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，我们把sing和dangcing作为参数传进去就ok啦。</p>
+<p>代码是这样:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myAlarmClock = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> clock = setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="built_in">console</span>.log(count);</span><br><span class="line">    <span class="keyword">if</span>(count==<span class="number">3</span>)&#123;</span><br><span class="line">        myAlarmClock.alarm(myAlarmClock.sing);<span class="comment">//直接将myAlarmClock作为参数放进alarm方法</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;,<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">myAlarmClock.alarm = <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'时间到了！！！'</span>);</span><br><span class="line">    callback();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myAlarmClock.sing = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'我在唱歌！！！'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myAlarmClock.dancing = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"我在跳舞"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样确实实现了一个基本的回调功能，但是，这还不算最完善的。在alarm中，作为参数的callback你必须要保证其为一个方法才行，不然就没办法执行了，所有这里我们还需要做一个判断。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myAlarmClock = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> clock = setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="built_in">console</span>.log(count);</span><br><span class="line">    <span class="keyword">if</span>(count==<span class="number">3</span>)&#123;</span><br><span class="line">        myAlarmClock.alarm(myAlarmClock.sing);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;,<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">myAlarmClock.alarm = <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'时间到了！！！'</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> callback == <span class="string">'function'</span>) &#123;<span class="comment">//加入了对callback的类型检测，如果是一个方法才会执行接下来的代码</span></span><br><span class="line">        callback();</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(callback+<span class="string">"不是一个方法"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myAlarmClock.sing = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'我在唱歌！！！'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myAlarmClock.dancing = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"我在跳舞"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上只是关于回调的一些最最简单的理解，这里还没有涉及到回调函数的作用域的问题，但是在javascript中，回调是一个不能忽视的重要方法，需要好好研究和掌握。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Timing-House/tags/Javascript/" rel="tag"># Javascript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Timing-House/2016/06/20/用Python来做一个可以爬取网络上衣着暴（裸）露的妹子（帅哥）图片的小爬虫/" rel="next" title="用Python来做一个可以爬取网络上衣着暴（裸）露的妹子（帅哥）图片的小爬虫">
+                <i class="fa fa-chevron-left"></i> 用Python来做一个可以爬取网络上衣着暴（裸）露的妹子（帅哥）图片的小爬虫
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Timing-House/2016/08/18/一些前端编辑器的用后感/" rel="prev" title="一些前端编辑器的用后感">
+                一些前端编辑器的用后感 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/Timing-House/images/avatar.gif" alt="Sa">
+          <p class="site-author-name" itemprop="name">Sa</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/Timing-House/archives">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Sangliang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="378305868@qq.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sa</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/Timing-House/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/Timing-House/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/Timing-House/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

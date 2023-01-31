@@ -1,0 +1,791 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/Timing-House/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/Timing-House/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/Timing-House/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Javascript,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Timing-House/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="遍历算法在我们日常编程过程中算是使用得最多的了。这里我们就简单的聊聊，在JS中关于各种基本数据结构的遍历方式以及其相关的坑。">
+<meta name="keywords" content="Javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊聊JS中的遍历">
+<meta property="og:url" content="https://sangliang.github.io/Timing-House/2017/10/31/聊聊JS中的遍历/index.html">
+<meta property="og:site_name" content="Sa&#39;s Timing House">
+<meta property="og:description" content="遍历算法在我们日常编程过程中算是使用得最多的了。这里我们就简单的聊聊，在JS中关于各种基本数据结构的遍历方式以及其相关的坑。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2022-03-16T03:31:21.959Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="聊聊JS中的遍历">
+<meta name="twitter:description" content="遍历算法在我们日常编程过程中算是使用得最多的了。这里我们就简单的聊聊，在JS中关于各种基本数据结构的遍历方式以及其相关的坑。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/Timing-House/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sangliang.github.io/Timing-House/2017/10/31/聊聊JS中的遍历/">
+
+
+
+
+
+  <title> 聊聊JS中的遍历 | Sa's Timing House </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1261741312&web_id=1261741312" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/Timing-House/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sa's Timing House</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Sa 的学习笔记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/Timing-House/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/Timing-House/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://sangliang.github.io/Timing-House/Timing-House/2017/10/31/聊聊JS中的遍历/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sa">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/Timing-House/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sa's Timing House">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                聊聊JS中的遍历
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-31T00:00:00+08:00">
+                2017-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>遍历算法在我们日常编程过程中算是使用得最多的了。这里我们就简单的聊聊，在JS中关于各种基本数据结构的遍历方式以及其相关的坑。</p>
+<a id="more"></a>
+<h4 id="字符串的遍历"><a href="#字符串的遍历" class="headerlink" title="字符串的遍历"></a>字符串的遍历</h4><ul>
+<li>for循环</li>
+</ul>
+<p>在以前的JS中，并没有直接遍历字符串的函数，我们遍历一个字符串的话，需要这样做：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">'Hello Sa'</span>;</span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; str.length; i++) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(str.charAt(i));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; Hello Sa</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>for in遍历</li>
+</ul>
+<p>取到字符串的长度，然后通过for循环，用charAt函数来定位到具体的位置。同样的方式还有for in ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">'Hello Sa'</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> str) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(str.charAt(i));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; Hello Sa</span></span><br></pre></td></tr></table></figure>
+<p>但是这种方式虽然可行，可是又用了遍历索引，又用了字符串方法，感觉不够优雅。</p>
+<p>既然说到了for in方法，那么就说说for in中得注意得地方: 在for(var i in str) 语句中，你所使用的i和for(var i = 0; i&lt;str.length,i++)中的i是不一样的。前者是字符串类型，后者是number类型，这就需要我们引起重视，有时候我们会要做索引与变量的求和操作，这个时候如果索引是字符串类型就会引起一些很小很隐蔽的错误。</p>
+<ul>
+<li>for of遍历</li>
+</ul>
+<p>于是在ES6中，最最万金油的遍历方法诞生：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">'Hello Sa'</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">of</span> str) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; Hello Sa</span></span><br></pre></td></tr></table></figure>
+<p>看看关于MDN中对for of 方法的描述：</p>
+<blockquote>
+<p>for…of语句在可迭代对象（包括 Array，Map，Set，String，TypedArray，arguments 对象等等）上创建一个迭代循环，调用自定义迭代钩子，并为每个不同属性的值执行语句。</p>
+</blockquote>
+<p>for of可以遍历所有的基本数据类型，但是却无法遍历一般的对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;<span class="string">"name"</span>:<span class="string">"sa"</span>,<span class="string">"age"</span>:<span class="number">25</span>&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">of</span> obj) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; error</span></span><br></pre></td></tr></table></figure>
+<p>对于这样的对象，我们还是统一用for in吧。</p>
+<h4 id="数组的遍历"><a href="#数组的遍历" class="headerlink" title="数组的遍历"></a>数组的遍历</h4><ul>
+<li>for 循环</li>
+</ul>
+<p>看到遍历数组，大家最先想到的肯定是for循环：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myArray = [<span class="string">"sa"</span>,<span class="string">"25"</span>,<span class="string">"changsha"</span>];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; myArray.length; i ++)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i);</span><br><span class="line">    <span class="built_in">console</span>.log(myArray[i]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; 0 1 2</span></span><br><span class="line"><span class="comment">// -&gt; sa 25 changsha</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>while 循环</li>
+</ul>
+<p>完全没有问题，这是最最common的遍历方式，但是也有人用while:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myArray = [<span class="string">"sa"</span>,<span class="string">"25"</span>,<span class="string">"changsha"</span>];</span><br><span class="line"><span class="keyword">var</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span>(i&lt;myArray.length)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(myArray[i]);</span><br><span class="line">    i++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; sa 25 changsha</span></span><br></pre></td></tr></table></figure>
+<p>要是有人在我的代码里这样用while写遍历，我百分之一百会打死他，除非他是我头儿，哈哈。</p>
+<p>while在js里来说还是需要非常注意以及小心使用的循环方法，如果稍有不慎，在跳出条件上没有做好控制，就能秒秒钟让你的web页面崩溃，卡到动不了，而且，更厉害的是，如果你用了很多这样的遍历方法，你甚至连错误都很难找到，控制台经常内存泄漏死掉连错误信息都没有，所以，上面的while遍历方法，在我看来，是很不安全的，尽量少用。</p>
+<ul>
+<li>forEach 循环</li>
+</ul>
+<p>forEach是ES5中发布的数组循环的方法，我们来看看：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myArray = [<span class="string">"sa"</span>,<span class="string">"25"</span>,<span class="string">"changsha"</span>];</span><br><span class="line">myArray.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">value,index</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value,index);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; sa 0  25 1  changsha 2</span></span><br></pre></td></tr></table></figure>
+<p>看上去还是挺不错的，能成功的将值和索引都遍历出来，但是也有致命的缺陷。那就是forEach循环中无法使用跳出循环的语句，如：break。这样就导致forEach的使用场景被大大的限制了。</p>
+<ul>
+<li>for in 循环</li>
+</ul>
+<p>当然，遍历数组也是可以用到for in的:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myArray = [<span class="string">"sa"</span>,<span class="string">"25"</span>,<span class="string">"changsha"</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> myArray)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(myArray[i]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; sa 25 changsha</span></span><br></pre></td></tr></table></figure>
+<p>完全没有问题，for in要小心的地方我已经在字符串遍历的时候说了，上述代码中的i都是字符串。</p>
+<ul>
+<li>map 和 filter 遍历</li>
+</ul>
+<p>这两个方法多是用在对数组元素的操作上，但是有很多同学可能都没有使用过。这里我们先看看MDN上关于两者的介绍：</p>
+<p>map:</p>
+<blockquote>
+<p>map() 方法创建一个新数组，其结果是该数组中的每个元素都调用一个提供的函数后返回的结果。</p>
+</blockquote>
+<p>filter:</p>
+<blockquote>
+<p>filter 为数组中的每个元素调用一次 callback 函数，并利用所有使得 callback 返回 true 或 等价于 true 的值 的元素创建一个新数组。callback 只会在已经赋值的索引上被调用，对于那些已经被删除或者从未被赋值的索引不会被调用。那些没有通过 callback 测试的元素会被跳过，不会被包含在新数组中。</p>
+</blockquote>
+<p>其实这两个函数在使用的方法上还是挺相似的，都是通过遍历数组中的没个元素，然后对其执行相应的函数，然后将结果返回到一个新的数组中去。</p>
+<p>我们来看看用这种方式的遍历：</p>
+<p>map:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myArray = [<span class="string">"sa"</span>,<span class="string">"25"</span>,<span class="string">"changsha"</span>];</span><br><span class="line"><span class="keyword">var</span> result = myArray.map(<span class="function"><span class="keyword">function</span>(<span class="params">value</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"hello! "</span> + value </span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(myArray);</span><br><span class="line"><span class="built_in">console</span>.log(result);</span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; sa</span></span><br><span class="line"><span class="comment">// -&gt; 25</span></span><br><span class="line"><span class="comment">// -&gt; changsha</span></span><br><span class="line"><span class="comment">// -&gt; [ 'sa', '25', 'changsha' ]</span></span><br><span class="line"><span class="comment">// -&gt; [ 'hello! sa', 'hello! 25', 'hello! changsha' ]</span></span><br></pre></td></tr></table></figure>
+<p>我们在map函数中不仅可以遍历每个数组对象，还能对其操作返回新的数组，而且新数组与原来得数组相互不影响。这是其很棒得一个特性，解决了一个数组浅拷贝的问题。</p>
+<p>filter方法的使用也是类似的，只是在返回新数组的时候filter有一个判别条件，用来返回符合要求的结果。也算是如其名吧。</p>
+<p>filter:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myArray =  [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result = myArray2.filter(<span class="function"><span class="keyword">function</span>(<span class="params">value</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value &gt; <span class="number">4</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(me); </span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; [5,6]</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>for of</li>
+</ul>
+<p>最后放上来的是ES6中的for of,除了对象类型，什么都可以遍历的万金油方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myArray = [<span class="string">"sa"</span>,<span class="string">"25"</span>,<span class="string">"changsha"</span>];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">of</span> myArray)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(item);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; sa 25 changsha</span></span><br></pre></td></tr></table></figure>
+<h4 id="JS对象的遍历"><a href="#JS对象的遍历" class="headerlink" title="JS对象的遍历"></a>JS对象的遍历</h4><ul>
+<li>for in </li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj = &#123;<span class="string">"name"</span>:<span class="string">"sa"</span>,<span class="string">"age"</span>:<span class="string">"25"</span>,<span class="string">"location"</span>:<span class="string">"changsha"</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i <span class="keyword">in</span> obj)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(obj[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先列出来的是最最常用的for in循环。前面已经做过了介绍，这里就不再重复了。</p>
+<ul>
+<li>Object.keys和 forEach的组合方式</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj = &#123;<span class="string">"name"</span>:<span class="string">"sa"</span>,<span class="string">"age"</span>:<span class="string">"25"</span>,<span class="string">"location"</span>:<span class="string">"changsha"</span>&#125;;</span><br><span class="line"><span class="built_in">Object</span>.keys(obj).forEach(<span class="function"><span class="keyword">function</span>(<span class="params">value,index</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(value,index);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这是通过Object.keys方法来获取对象的key数组，然后使用forEach遍历该数组，最后遍历出对象所有value的方法。类似的组合方式还有一些，我就不举例说明了，原理都和上述方式一致。</p>
+<h4 id="关于for循环中的闭包所引起的索引问题"><a href="#关于for循环中的闭包所引起的索引问题" class="headerlink" title="关于for循环中的闭包所引起的索引问题"></a>关于for循环中的闭包所引起的索引问题</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> list = [];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">    list.push(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(i)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(list[<span class="number">0</span>](), list[<span class="number">1</span>](), list[<span class="number">2</span>]());</span><br><span class="line"></span><br><span class="line"><span class="comment">// -&gt; 3 3 3</span></span><br></pre></td></tr></table></figure>
+<p>很多人预期的结果是0 1 2 ，但是最后的结果是3 3 3。</p>
+<p>造成这个结果的原因是因为i的变量升级，当我们在for循环的时候执行list.push时，此时的函数只是一个声明，并没有将i的值确定，而在我们执行list<a href>0</a>这样的函数时，程序才会开始去查找这个i的值，而此时的for循环早已经结束了，i从for循环中块级变量提升到了全局变量（js中没有块级作用域），最后停到了3的位置，于是，不论是list[0],还是list[1],list[2]所能取到的i都只有最后一个3（不要问我为什么是3不是2）。当然，对这个问题，你只要这样理解就可以了，至于更底层的原因，如果你有兴趣就自己去网上搜一搜，我就不展开讲了。</p>
+<p>解决的办法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> list = [];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line"></span><br><span class="line">    (<span class="function"><span class="keyword">function</span> (<span class="params">i</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> list.push(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(i)</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;)(i)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(list[<span class="number">0</span>](), list[<span class="number">1</span>](), list[<span class="number">2</span>]());</span><br></pre></td></tr></table></figure>
+<p>为什么加了一个闭包就可以了呢？</p>
+<p>因为这里的闭包是一个立即执行的函数，每一次的运行，i作为参数传进去，函数中的i值立马就确定了，不需要等到最后调用的时候才去查找这个i的值（确定的 0 1 2）。</p>
+<p>不过在ES6中有了更棒的解决办法。由于ES6引入了新的声明关键字let，而let又是属于块级作用域的，所以</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> list = [];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">return</span> list.push(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(i)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(list[<span class="number">0</span>](), list[<span class="number">1</span>](), list[<span class="number">2</span>]());</span><br></pre></td></tr></table></figure>
+<p>当执行list[0]()时，i的值不会再从全局作用域里取到了，而是从存在的块级作用域中正确拿到。所以，在for循环中使用let时，不需要引入闭包也能解决变量升级的问题了。</p>
+<h4 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h4><p>ok，关于js的遍历就讲到这里，关于遍历中的坑我也简单的提了一下，希望能对不了解的同学有所帮助。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/Timing-House/tags/Javascript/" rel="tag"># Javascript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Timing-House/2017/09/30/白鹭引擎初用感受/" rel="next" title="白鹭引擎初用感受">
+                <i class="fa fa-chevron-left"></i> 白鹭引擎初用感受
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Timing-House/2017/11/16/远离回调地狱，聊聊promise与async/" rel="prev" title="远离回调地狱，聊聊promise与async">
+                远离回调地狱，聊聊promise与async <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/Timing-House/images/avatar.gif" alt="Sa">
+          <p class="site-author-name" itemprop="name">Sa</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/Timing-House/archives">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Sangliang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="378305868@qq.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串的遍历"><span class="nav-number">1.</span> <span class="nav-text">字符串的遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组的遍历"><span class="nav-number">2.</span> <span class="nav-text">数组的遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JS对象的遍历"><span class="nav-number">3.</span> <span class="nav-text">JS对象的遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于for循环中的闭包所引起的索引问题"><span class="nav-number">4.</span> <span class="nav-text">关于for循环中的闭包所引起的索引问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结尾"><span class="nav-number">5.</span> <span class="nav-text">结尾</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sa</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/Timing-House/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/Timing-House/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/Timing-House/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/Timing-House/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/Timing-House/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
